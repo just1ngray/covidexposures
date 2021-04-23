@@ -2,8 +2,6 @@ package-lock.json
 node_modules/
 keys.ts
 
-/app/node_modules/
-/app/.next/
-/app/out/
-/app/build
-/app/package-lock.json
+.next/
+out/
+/build

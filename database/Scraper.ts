@@ -1,4 +1,4 @@
-import { Schema, Document, model } from "mongoose";
+import { Schema, Document, model, models } from "mongoose";
 import puppeteer from "puppeteer";
 
 import { ExposureModel, Exposure } from "./Exposure";
@@ -100,4 +100,4 @@ ScraperSchema.methods.scrape = async function(millis: number = 0): Promise<numbe
     return count;
 }
 
-export const ScraperModel = model("Scraper", ScraperSchema);
+export const ScraperModel = models.Scraper || model("Scraper", ScraperSchema);

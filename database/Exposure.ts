@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from "mongoose";
+import { Schema, model, Document, Types, models } from "mongoose";
 import axios from "axios";
 
 import keys from "../keys";
@@ -94,7 +94,7 @@ ExposureSchema.methods.locate = async function(): Promise<boolean> {
             address: me.address, 
             long: { $ne: null },
             lat: { $ne: null }
-        });
+        }) as Exposure;
 
         if (dupAddr) {
             me.long = dupAddr.long;
@@ -122,4 +122,4 @@ ExposureSchema.methods.locate = async function(): Promise<boolean> {
     }
 }
 
-export const ExposureModel = model("Exposure", ExposureSchema);
+export const ExposureModel = models.Exposure || model("Exposure", ExposureSchema);

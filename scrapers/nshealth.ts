@@ -23,7 +23,7 @@ export async function scrape(page: puppeteer.Page, millis: number): Promise<Expo
         .map((row) => {
             const time = parseTime(row[1]);
 
-            const exposure: Exposure = new ExposureModel({
+            const exposure = new ExposureModel({
                 scraper: null,
                 name: row[0],
                 address: row[2],
@@ -32,7 +32,7 @@ export async function scrape(page: puppeteer.Page, millis: number): Promise<Expo
                 long: null,
                 epoch: time.epoch,
                 width: time.width
-            });
+            }) as Exposure;
 
             return exposure;
         })

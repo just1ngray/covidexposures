@@ -4,7 +4,7 @@ import fs from "fs";
 export default async function() {
     await initScrapers();
 
-    const scrapers: Scraper[] = await ScraperModel.find();
+    const scrapers = await ScraperModel.find() as Scraper[];
 
     for (const scraper of scrapers) {
         try {
@@ -28,12 +28,10 @@ function initScrapers(): Promise<void> {
             const saves: Promise<any>[] = [];
 
             for (const scraperFile of scraperFiles) {
-                if (scraperFile == "README.md") continue;
-
-                const scraper: Scraper = new ScraperModel({ 
+                const scraper = new ScraperModel({ 
                     URL: require(`../scrapers/${scraperFile}`).URL,
                     name: scraperFile
-                });
+                }) as Scraper;
                 const exists = await ScraperModel.exists({ URL: scraper.URL });
                 if (!exists) {
                     saves.push(scraper.save());

@@ -4,7 +4,10 @@
   "description": "Automatically find COVID-19 exposures",
   "main": "main.ts",
   "scripts": {
-    "start": "ts-node main.ts"
+    "backend": "ts-node main.ts",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "author": "Justin Gray",
   "license": "MIT",
@@ -12,10 +15,15 @@
     "axios": "^0.21.1",
     "luxon": "^1.26.0",
     "mongoose": "^5.12.5",
-    "puppeteer": "^9.0.0"
+    "next": "10.1.3",
+    "puppeteer": "^9.0.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "devDependencies": {
     "@types/luxon": "^1.26.4",
-    "@types/puppeteer": "^5.4.3"
+    "@types/puppeteer": "^5.4.3",
+    "@types/react": "^17.0.3",
+    "typescript": "^4.2.4"
   }
 }
