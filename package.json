@@ -4,7 +4,7 @@
   "description": "Automatically find COVID-19 exposures",
   "main": "main.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node main.ts"
   },
   "author": "Justin Gray",
   "license": "MIT",
