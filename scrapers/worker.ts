@@ -34,7 +34,7 @@ function initScrapers(): Promise<void> {
             const saveNscrape: Promise<any>[] = [];
 
             for (const scraperFile of scraperFiles) {
-                if (__filename.endsWith(scraperFile)) continue;
+                if (__filename.endsWith(scraperFile) || scraperFile == "README.md") continue;
 
                 const scraper: Scraper = new ScraperModel({ 
                     URL: require(`./${scraperFile}`).URL,
