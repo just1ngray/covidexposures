@@ -1,4 +1,7 @@
 import { Schema, model, Document, Types } from "mongoose";
+import axios from "axios";
+
+import keys from "../keys";
 
 export interface Exposure extends Document {
     /** the _id of the Scraper who found this exposure */
@@ -24,6 +27,9 @@ export interface Exposure extends Document {
 
     /** any instructions from the source */
     instructions: string
+
+    /** locates the address and fills long/lat values efficiently */
+    locate: () => Promise<void>;
 }
 
 export const ExposureSchema = new Schema({
@@ -77,5 +83,41 @@ ExposureSchema.index({
     epoch: 1,
     width: 1
 }, { unique: true });
+
+ExposureSchema.methods.locate = async function(): Promise<void> {
+    const me = this as Exposure;
+    if (me.long != null) return Promise.reject("Exposure already located");
+
+    try {
+        // first check if we've already located this address
+        const dupAddr = await ExposureModel.findOne({ 
+            address: me.address, 
+            long: { $ne: null },
+            lat: { $ne: null }
+        });
+
+        if (dupAddr) {
+            me.long = dupAddr.long;
+            me.lat = dupAddr.lat;
+
+            await me.save();
+            return;
+        }
+
+        // we've never located this address - query google api
+        const addr = encodeURIComponent(me.address);
+        const { data } = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${addr}&key=${keys.google.geocode}`)
+
+        me.long = data.results[0].geometry.location.lng;
+        me.lat = data.results[0].geometry.location.lat;
+
+        await me.save();
+    } catch (err) {
+        // null island
+        me.long = 0.0;
+        me.lat = 0.0;
+        return Promise.reject(err);
+    }
+}
 
 export const ExposureModel = model("Exposure", ExposureSchema);
