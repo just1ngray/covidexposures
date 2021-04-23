@@ -4,40 +4,34 @@ import fs from "fs";
 export default async function() {
     await initScrapers();
 
-    await new Promise<void>((resolve) => {
-        setTimeout(() => resolve(), 1000*60*10);
-    });
+    const scrapers: Scraper[] = await ScraperModel.find();
 
-    while (true) {
-        const scrapers: Scraper[] = await ScraperModel.find();
-
-        for (const scraper of scrapers) {
-            try {
-                const amt = await scraper.scrape();
-                if (amt > 0) console.log(`Added ${amt} exposures via ${scraper.name}`);
-            } catch {
-                // do nothing
-            }
+    for (const scraper of scrapers) {
+        try {
+            console.log(`Scraping ${scraper.URL}...`);
+            const amt = await scraper.scrape();
+            if (amt > 0) console.log(`Added ${amt} exposures via ${scraper.name}`);
+        } catch {
+            // do nothing
         }
-
-        await new Promise<void>((resolve) => {
-            setTimeout(() => resolve(), 1000*60*20);
-        });
     }
 }
 
+let isInitialized = false;
 function initScrapers(): Promise<void> {
     return new Promise((resolve, reject) => {
+        if (isInitialized) return resolve();
+
         fs.readdir("./scrapers", async (err, scraperFiles: string[]) => {
-            if (err) reject(err);
+            if (err) return reject(err);
 
             const saveNscrape: Promise<any>[] = [];
 
             for (const scraperFile of scraperFiles) {
-                if (__filename.endsWith(scraperFile) || scraperFile == "README.md") continue;
+                if (scraperFile == "README.md") continue;
 
                 const scraper: Scraper = new ScraperModel({ 
-                    URL: require(`./${scraperFile}`).URL,
+                    URL: require(`../scrapers/${scraperFile}`).URL,
                     name: scraperFile
                 });
                 const exists = await ScraperModel.exists({ URL: scraper.URL });
@@ -50,5 +44,7 @@ function initScrapers(): Promise<void> {
 
             Promise.all(saveNscrape).then(() => resolve());
         });
+
+        isInitialized = true;
     });
 }

@@ -1,7 +1,9 @@
 import fs from "fs";
 
 import * as database from "./database/db";
-import scraperWorker from "./scrapers/worker";
+import worker from "./workers/worker";
+import scraping from "./workers/scraping";
+import geocoding from "./workers/geocoding";
 
 // set up key file
 if (!fs.existsSync("./keys.ts")) fs.writeFileSync("./keys.ts",
@@ -18,10 +20,14 @@ if (!fs.existsSync("./keys.ts")) fs.writeFileSync("./keys.ts",
 // connect to the database and start tasks
 (async () => {
     await database.connect();
+
     process.on("SIGINT", async () => {
         await database.disconnect();
         process.exit(0);
     });
 
-    scraperWorker();
+    // worker(11, 19, scraping);
+    // worker(3, 7, geocoding);
+    worker(0, 2, scraping);
+    worker(0, 0.5, geocoding);
 })();

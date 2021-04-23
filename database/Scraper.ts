@@ -69,7 +69,6 @@ ScraperSchema.methods.scrape = async function(millis: number = 0): Promise<numbe
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(me.URL);
-    console.log(`Scraping ${me.URL}...`);
     const exposures = await scraper(page, millis);
     await browser.close();
 
