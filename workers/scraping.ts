@@ -10,9 +10,9 @@ export default async function() {
         try {
             console.log(`Scraping ${scraper.URL}...`);
             const amt = await scraper.scrape();
-            if (amt > 0) console.log(`Added ${amt} exposures via ${scraper.name}`);
-        } catch {
-            // do nothing
+            console.log(`Added ${amt} exposures via ${scraper.name}`);
+        } catch (err) {
+            console.error(err)
         }
     }
 }
@@ -25,7 +25,7 @@ function initScrapers(): Promise<void> {
         fs.readdir("./scrapers", async (err, scraperFiles: string[]) => {
             if (err) return reject(err);
 
-            const saveNscrape: Promise<any>[] = [];
+            const saves: Promise<any>[] = [];
 
             for (const scraperFile of scraperFiles) {
                 if (scraperFile == "README.md") continue;
@@ -36,13 +36,11 @@ function initScrapers(): Promise<void> {
                 });
                 const exists = await ScraperModel.exists({ URL: scraper.URL });
                 if (!exists) {
-                    saveNscrape.push(
-                        scraper.save().then(() => scraper.scrape())
-                    );
+                    saves.push(scraper.save());
                 }
             }
 
-            Promise.all(saveNscrape).then(() => resolve());
+            Promise.all(saves).then(() => resolve());
         });
 
         isInitialized = true;

@@ -3,12 +3,20 @@ import { ExposureModel, Exposure } from "../database/Exposure";
 export default async function() {
     const exposures: Exposure[] = await ExposureModel.find({ long: null, lat: null });
 
+    let exposuresLocated = 0;
+    let exposuresGeocoded = 0;
+
     for (const exposure of exposures) {
         try {
-            await exposure.locate();
-            console.log(`Geocoded exposure location: ${exposure.address}`);
-        } catch {
-            // do nothing
+            exposuresLocated ++;
+            const didCallGoogleAPI = await exposure.locate();
+            if (didCallGoogleAPI) exposuresGeocoded ++;
+        } catch (err) {
+            console.error(err);
+            exposuresGeocoded ++; // assume it used a call
         }
     }
+
+    console.log(`Located ${exposuresLocated} exposures, and `
+        + `used ${exposuresGeocoded} geocoding api calls.`);
 }

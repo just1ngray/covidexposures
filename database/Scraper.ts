@@ -97,7 +97,7 @@ ScraperSchema.methods.scrape = async function(millis: number = 0): Promise<numbe
         }
     }
 
-    return Promise.resolve(count);
+    return count;
 }
 
 export const ScraperModel = model("Scraper", ScraperSchema);

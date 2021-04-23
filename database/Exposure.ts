@@ -29,7 +29,7 @@ export interface Exposure extends Document {
     instructions: string
 
     /** locates the address and fills long/lat values efficiently */
-    locate: () => Promise<void>;
+    locate: () => Promise<boolean>;
 }
 
 export const ExposureSchema = new Schema({
@@ -84,7 +84,7 @@ ExposureSchema.index({
     width: 1
 }, { unique: true });
 
-ExposureSchema.methods.locate = async function(): Promise<void> {
+ExposureSchema.methods.locate = async function(): Promise<boolean> {
     const me = this as Exposure;
     if (me.long != null) return Promise.reject("Exposure already located");
 
@@ -101,7 +101,7 @@ ExposureSchema.methods.locate = async function(): Promise<void> {
             me.lat = dupAddr.lat;
 
             await me.save();
-            return;
+            return false;
         }
 
         // we've never located this address - query google api
@@ -112,10 +112,12 @@ ExposureSchema.methods.locate = async function(): Promise<void> {
         me.lat = data.results[0].geometry.location.lat;
 
         await me.save();
+        return true;
     } catch (err) {
         // null island
         me.long = 0.0;
         me.lat = 0.0;
+        await me.save();
         return Promise.reject(err);
     }
 }

@@ -26,8 +26,8 @@ if (!fs.existsSync("./keys.ts")) fs.writeFileSync("./keys.ts",
         process.exit(0);
     });
 
-    // worker(11, 19, scraping);
-    // worker(3, 7, geocoding);
-    worker(0, 2, scraping);
-    worker(0, 0.5, geocoding);
+    worker(11, 19, scraping);
+    worker(3, 7, geocoding);
+    // worker(0, 2, scraping);
+    // worker(0, 0.5, geocoding);
 })();
