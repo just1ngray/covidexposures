@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Navbar() {
     const router = useRouter();
-    const [isOpen, setIsOpen] = useState<boolean>(true);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
     function toggle() {
         setIsOpen((current) => !current);
