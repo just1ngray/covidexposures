@@ -12,8 +12,11 @@ export default async function() {
             const didCallGoogleAPI = await exposure.locate();
             if (didCallGoogleAPI) exposuresGeocoded ++;
         } catch (err) {
-            console.error(err);
-            exposuresGeocoded ++; // assume it used a call
+            // silence error message when no results are found (null island case)
+            if (!err.message.includes("'geometry' of undefined"))
+                console.error(err);
+            
+            exposuresGeocoded ++; // assume it used a google api call
         }
     }
 
