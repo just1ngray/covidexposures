@@ -1,4 +1,5 @@
 import { Scraper } from "../../../database/Scraper";
+import PopButton from "../../PopButton";
 
 interface ScraperProps {
     scraper: Scraper & { count: number }
@@ -9,14 +10,11 @@ export default function ScraperStatus({ scraper }: ScraperProps) {
     const name = scraper.name.split(".")[0];
 
     return (
-        <button onClick={() => window.location.href=scraper.URL} className="
+        <PopButton onClick={() => window.location.href=scraper.URL} className="
             shadow-lg p-2 rounded-md
-            cursor-pointer hover:bg-gray-100
-            transform hover:-translate-y-1 hover:scale-105 duration-100
             flex flex-col
             w-full md:w-auto
             truncate
-            relative
         ">
             <div className="flex flex-row items-center w-full absolute right-1">
                 <p className="pr-1 flex-grow text-right text-gray-500 text-xs">
@@ -37,6 +35,6 @@ export default function ScraperStatus({ scraper }: ScraperProps) {
                 <p>Last Checked: {new Date(scraper.lastScrape).toLocaleString()}</p>
                 <p># Exposures Tracked: {scraper.count}</p>
             </div>
-        </button>
+        </PopButton>
     );
 }
