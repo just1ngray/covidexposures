@@ -12,7 +12,7 @@ export default async function() {
             const amt = await scraper.scrape();
             console.log(`Added ${amt} exposures via ${scraper.name}`);
         } catch (err) {
-            console.error(err)
+            console.error(scraper, err)
         }
     }
 }
@@ -33,7 +33,7 @@ function initScrapers(): Promise<void> {
                     URL, country, language, center,
                     name: scraperFile
                 }) as Scraper;
-                const exists = await ScraperModel.exists({ URL: scraper.URL });
+                const exists = await ScraperModel.exists({ name: scraper.name });
                 if (!exists) {
                     saves.push(scraper.save());
                 }
