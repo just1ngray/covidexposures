@@ -12,6 +12,7 @@
   "author": "Justin Gray",
   "license": "MIT",
   "dependencies": {
+    "@mapbox/mapbox-sdk": "^0.12.1",
     "axios": "^0.21.1",
     "luxon": "^1.26.0",
     "mongoose": "^5.12.5",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@types/luxon": "^1.26.4",
+    "@types/mapbox__mapbox-sdk": "^0.11.1",
     "@types/puppeteer": "^5.4.3",
     "@types/react": "^17.0.3",
     "autoprefixer": "^10.2.5",

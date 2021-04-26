@@ -8,9 +8,7 @@ import geocoding from "./workers/geocoding";
 // set up key file
 if (!fs.existsSync("./keys.ts")) fs.writeFileSync("./keys.ts",
 `export default {
-    google: {
-        geocode: "GOOGLE_GEOCODE_API_KEY"
-    },
+    mapbox: "MAPBOX_ACCESS_TOKEN",
     mailjet: {
         key: "MAILJET_MAIN_ACCOUNT_API_KEY",
         secret: "MAILJET_MAIN_ACCOUNT_SECRET_KEY"

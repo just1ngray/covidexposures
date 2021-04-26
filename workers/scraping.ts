@@ -28,8 +28,9 @@ function initScrapers(): Promise<void> {
             const saves: Promise<any>[] = [];
 
             for (const scraperFile of scraperFiles) {
+                const { URL, country, language, center } = require(`../scrapers/${scraperFile}`).config;
                 const scraper = new ScraperModel({ 
-                    URL: require(`../scrapers/${scraperFile}`).URL,
+                    URL, country, language, center,
                     name: scraperFile
                 }) as Scraper;
                 const exists = await ScraperModel.exists({ URL: scraper.URL });
