@@ -39,7 +39,7 @@ export async function getStaticProps() {
     const addCounts = [];
     for (const s of scrapers)
         addCounts.push(
-            ExposureModel.find({ scraper: s._id }).count()
+            ExposureModel.countDocuments({ scraper: s._id })
                 .then((n) => (s as any).count = n)
         );
     await Promise.all(addCounts);
