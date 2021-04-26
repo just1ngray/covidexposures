@@ -3,8 +3,10 @@ import keys from "../keys";
 import { ExposureModel, Exposure } from "../database/Exposure";
 
 export default async function() {
-    const exposures = await ExposureModel.find({ long: null, lat: null })
-        .populate("scraper") as Exposure[];
+    const exposures = await ExposureModel.find({ 
+        "coord.long": null, 
+        "coord.lat": null 
+    }).populate("scraper") as Exposure[];
 
     let exposuresLocated = 0;
     let exposuresGeocoded = 0;
