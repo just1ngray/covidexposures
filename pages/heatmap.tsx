@@ -28,7 +28,7 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
     const [viewport, setViewport] = useState<ViewPort>({
         latitude: 44.651070,
         longitude: -63.582687,
-        zoom: 15
+        zoom: 11
     });
     const mapRef = useRef(null);
 
@@ -60,7 +60,7 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
     const geojson = useMemo(() => generateGeojson(cache.exposures), [cache.exposures]);
 
     return (
-        <Container>
+        <Container className="overflow-hidden">
             <ReactMapGL mapboxApiAccessToken={apiKey}
                 width="100%" height="100%"
                 mapStyle="mapbox://styles/mapbox/streets-v11"
