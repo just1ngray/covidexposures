@@ -2,6 +2,7 @@ import { Schema, Document, model, models } from "mongoose";
 import puppeteer from "puppeteer";
 
 import { ExposureModel, Exposure } from "./Exposure";
+import { CoordinateSchema } from "./Coordinate";
 
 
 export interface Scraper extends Document {
@@ -17,11 +18,17 @@ export interface Scraper extends Document {
     /** if the scraper is currently active */
     isActive: boolean;
 
-    /** 
-     * the "./scrapers/<???>.ts" file where the specific scraping implementation 
-     * is found 
-     */
+    /** the "./scrapers/<???>.ts" file where the specific scraping implementation is found */
     name: string;
+
+    /** comma-separated country of the exposure: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 */
+    country: string,
+
+    /** comma-separated language of the address: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes */
+    language: string,
+
+    /** the center of the health region */
+    center: { long: number | null, lat: number | null },
 
     /** scrapes the webpage for new exposures & adds them if possible */
     scrape: (millis?: number) => Promise<number>;
@@ -51,6 +58,23 @@ const ScraperSchema = new Schema({
         type: String,
         required: true,
         unique: true
+    },
+    country: {
+        type: String,
+        required: true,
+        match: /^[A-Z][A-Z](,[A-Z][A-Z])*$/
+    },
+    language: {
+        type: String,
+        default: "en",
+        match: /^[a-z][a-z](,[a-z][a-z])*$/
+    },
+    center: {
+        type: CoordinateSchema,
+        default: {
+            long: null,
+            lat: null
+        }
     }
 });
 
@@ -101,3 +125,20 @@ ScraperSchema.methods.scrape = async function(millis: number = 0): Promise<numbe
 }
 
 export const ScraperModel = models.Scraper || model("Scraper", ScraperSchema);
+
+export interface ScrapingConfig {
+    /** where the scraper looks */
+    URL: string,
+
+    /** comma-separated country of the exposure: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 */
+    country: string,
+
+    /** comma-separated language of the address: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes */
+    language: string,
+
+    /** the center of the health region */
+    center: {
+        long: number,
+        lat: number
+    }
+}

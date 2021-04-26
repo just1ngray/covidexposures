@@ -1,11 +1,11 @@
 import { Schema, model, Document, Types, models } from "mongoose";
-import axios from "axios";
 
-import keys from "../keys";
+import { Scraper } from "./Scraper";
+import { Coordinate, CoordinateSchema } from "./Coordinate";
 
 export interface Exposure extends Document {
     /** the _id of the Scraper who found this exposure */
-    scraper: Types.ObjectId,
+    scraper: Types.ObjectId & Scraper,
 
     /** of the exposure location */
     name: string,
@@ -19,24 +19,19 @@ export interface Exposure extends Document {
     /** millis of exposure window (epoch + width = exposure end time) */
     width: number,
 
-    /** the longitudinal coordinate of the exposure location */
-    long: number | null,
-
-    /** the latitude coordinate of the exposure location */
-    lat: number | null,
+    /** the coordinates of the exposure location */
+    coord: Coordinate,
 
     /** any instructions from the source */
     instructions: string
-
-    /** locates the address and fills long/lat values efficiently */
-    locate: () => Promise<boolean>;
 }
 
 export const ExposureSchema = new Schema({
     scraper: {
         type: Types.ObjectId,
         ref: "Scraper",
-        required: true
+        required: true,
+        default: null
     },
     name: {
         type: String,
@@ -57,19 +52,12 @@ export const ExposureSchema = new Schema({
         min: 1,
         default: 8.64*10**7
     },
-    long: {
-        type: Number,
-        default: null,
-        index: true,
-        min: -180,
-        max: 180
-    },
-    lat: {
-        type: Number,
-        default: null,
-        index: true,
-        min: -90,
-        max: 90
+    coord: {
+        type: CoordinateSchema,
+        default: {
+            long: null,
+            lat: null
+        }
     },
     instructions: {
         type: String,
@@ -77,49 +65,5 @@ export const ExposureSchema = new Schema({
         trim: true
     }
 });
-ExposureSchema.index({
-    name: 1,
-    address: 1,
-    epoch: 1,
-    width: 1
-}, { unique: true });
-
-ExposureSchema.methods.locate = async function(): Promise<boolean> {
-    const me = this as Exposure;
-    if (me.long != null) return Promise.reject("Exposure already located");
-
-    try {
-        // first check if we've already located this address
-        const dupAddr = await ExposureModel.findOne({ 
-            address: me.address, 
-            long: { $ne: null },
-            lat: { $ne: null }
-        }) as Exposure;
-
-        if (dupAddr) {
-            me.long = dupAddr.long;
-            me.lat = dupAddr.lat;
-
-            await me.save();
-            return false;
-        }
-
-        // we've never located this address - query google api
-        const addr = encodeURIComponent(me.address);
-        const { data } = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${addr}&key=${keys.google.geocode}`)
-
-        me.long = data.results[0].geometry.location.lng;
-        me.lat = data.results[0].geometry.location.lat;
-
-        await me.save();
-        return true;
-    } catch (err) {
-        // null island
-        me.long = 0.0;
-        me.lat = 0.0;
-        await me.save();
-        return Promise.reject(err);
-    }
-}
 
 export const ExposureModel = models.Exposure || model("Exposure", ExposureSchema);
