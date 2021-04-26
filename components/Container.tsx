@@ -8,6 +8,7 @@ export default function Container({ children }) {
             <main className="
                 flex flex-col 
                 flex-grow container mx-auto px-2 
+                relative
             ">
                 {children}
             </main>

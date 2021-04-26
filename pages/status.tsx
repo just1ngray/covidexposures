@@ -1,10 +1,11 @@
+import emoji from "country-to-emoji-flag";
+
 import Container from "../components/Container";
 import ScraperStatus from "../components/pagewise/status/ScraperStatus"
 import { ScraperModel, Scraper } from "../database/Scraper";
 import { ExposureModel } from "../database/Exposure";
 import * as db from "../database/db";
 import Contribute from "../components/Contribute";
-import PopButton from "../components/PopButton";
 
 interface Props {
     scrapers: [Scraper & { count: number}],
@@ -18,7 +19,7 @@ export default function Status({ scrapers, updated }: Props) {
                 Last Updated: {new Date(updated).toLocaleTimeString()}
             </p>
             <div className="
-                grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
+                grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3
                 gap-4
             ">
                 {scrapers.map(s => <ScraperStatus key={s.name} scraper={s} />)}
@@ -56,11 +57,13 @@ export async function getStaticProps() {
                     lastScrape: s.lastScrape,
                     isActive: s.isActive,
                     name: s.name,
+                    country: emoji(s.country),
+                    language: s.language,
                     count: (s as any).count
                 }
             }),
             updated: Date.now()
         },
-        revalidate: 5*60 // 5 minutes
+        // revalidate: 5*60 // 5 minutes
     }
 }

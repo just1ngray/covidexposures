@@ -96,8 +96,8 @@ const items = [
         href: "/status"
     },
     {
-        title: "Privacy",
-        href: "/privacy"
+        title: "Heatmap",
+        href: "/heatmap"
     },
     {
         title: "Look Up",

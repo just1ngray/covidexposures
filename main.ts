@@ -17,7 +17,7 @@ if (!fs.existsSync("./keys.ts")) fs.writeFileSync("./keys.ts",
 
 // connect to the database and start tasks
 (async () => {
-    await database.connect();
+    await database.connect(false);
 
     process.on("SIGINT", async () => {
         await database.disconnect();

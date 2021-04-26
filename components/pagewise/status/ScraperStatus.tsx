@@ -10,13 +10,25 @@ export default function ScraperStatus({ scraper }: ScraperProps) {
     const name = scraper.name.split(".")[0];
 
     return (
-        <PopButton onClick={() => window.location.href=scraper.URL} className="
+        <PopButton onClick={() => window.open(scraper.URL)} className="
             shadow-lg p-2 rounded-md
             flex flex-col
             w-full md:w-auto
             truncate
         ">
-            <div className="flex flex-row items-center w-full absolute right-1">
+            <h3 className="mt-2 text-4xl text-left border-b-2 font-medium w-full">
+                <span className="float-right text-xs font-thin">{scraper.language}</span>
+                {scraper.country} {name}
+            </h3>
+            <div className="underline text-blue-400">{scraper.URL}</div>
+
+            <div className="text-gray-600 text-left">
+                <p>First Checked: {new Date(scraper.firstScrape).toLocaleString()}</p>
+                <p>Last Checked: {new Date(scraper.lastScrape).toLocaleString()}</p>
+                <p># Exposures Tracked: {scraper.count}</p>
+            </div>
+
+            <div className="flex flex-row items-center w-full absolute right-1 bottom-1">
                 <p className="pr-1 flex-grow text-right text-gray-500 text-xs">
                     {scraper.isActive ? "Active" : "Inactive"}
                 </p>
@@ -25,15 +37,6 @@ export default function ScraperStatus({ scraper }: ScraperProps) {
                     <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-50 ${col} ${scraper.isActive ? "" : "hidden"}`} />
                     <span className={`relative inline-flex rounded-full h-3 w-3 ${col}`} />
                 </span>
-            </div>
-
-            <h3 className="text-4xl text-left border-b-2 w-full font-medium">{name}</h3>
-            <div className="underline text-blue-400">{scraper.URL}</div>
-
-            <div className="text-gray-600 text-left">
-                <p>First Checked: {new Date(scraper.firstScrape).toLocaleString()}</p>
-                <p>Last Checked: {new Date(scraper.lastScrape).toLocaleString()}</p>
-                <p># Exposures Tracked: {scraper.count}</p>
             </div>
         </PopButton>
     );

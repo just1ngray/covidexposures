@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export async function connect() {
+export async function connect(silent = true) {
     return mongoose.connect("mongodb://localhost:27017/covidexposures", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -8,7 +8,7 @@ export async function connect() {
         poolSize: 5
     })
         .then(() => {
-            console.log("Connected to MongoDB");
+            if (!silent) console.log("Connected to MongoDB");
             return true;
         })
         .catch((err) => {
