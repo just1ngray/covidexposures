@@ -105,7 +105,7 @@ export async function getStaticProps() {
         props: {
             apiKey: keys.mapbox
         },
-        // revalidate: 60*60*24 // 1 day TODO: Does this really need to be regenerated ever?
+        revalidate: 60*60*6 // 6 hours
     }
 }
 
