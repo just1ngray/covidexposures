@@ -57,13 +57,13 @@ export async function getStaticProps() {
                     lastScrape: s.lastScrape,
                     isActive: s.isActive,
                     name: s.name,
-                    country: emoji(s.country),
-                    language: s.language,
+                    country: emoji(s.country.split(",")[0]),
+                    language: s.language.split(",")[0],
                     count: (s as any).count
                 }
             }),
             updated: Date.now()
         },
-        // revalidate: 5*60 // 5 minutes
+        revalidate: 5*60 // 5 minutes
     }
 }
