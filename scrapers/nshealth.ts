@@ -34,7 +34,7 @@ export async function scrape(page: puppeteer.Page, millis: number): Promise<Expo
 
             const exposure = new ExposureModel({
                 name: row[0],
-                address: row[2],
+                address: specialCaseAddr(row[0]) ?? row[2],
                 instructions: row[4],
                 epoch: time.epoch,
                 width: time.width
@@ -45,6 +45,17 @@ export async function scrape(page: puppeteer.Page, millis: number): Promise<Expo
         .filter((exposure: Exposure) => exposure.epoch >= millis);
 
     return Promise.resolve(exposures);
+}
+
+function specialCaseAddr(name: string): string | null {
+    name = name.toLowerCase().replaceAll(/[^a-z]/, "");
+
+    if (name.includes("halifaxtransit"))
+        return "200 Ilsley Ave, Dartmouth, NS B3B 1V1";
+    else if (name.includes("flight"))
+        return "747 Bell Blvd, Goffs, NS B2T 1K2";
+
+    return null;
 }
 
 function parseTime(time: string): { epoch: number, width: number } {
