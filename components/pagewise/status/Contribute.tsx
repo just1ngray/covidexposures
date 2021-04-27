@@ -1,10 +1,11 @@
 import Image from "next/image";
-import PopButton from "./PopButton";
+import PopButton from "../../PopButton";
 
 interface Props {
     message?: string,
     href?: string,
-    className?: string
+    className?: string,
+    pop?: boolean
 }
 
 export default function Contribute({ 
@@ -13,13 +14,13 @@ export default function Contribute({
     className = ""
 }: Props) {
     return (
-        <div className={`flex justify-center ${className}`}>
+        <a href={href} className={`flex justify-center ${className}`}>
             <PopButton className="
                 flex items-center
                 border-gray-100 border
                 p-2 rounded-md
                 text-left
-            " onClick={() => window.location.href=href}>
+            ">
                 <div className="inline-block">
                     <Image src="/GitHub-Mark-64px.png" layout="fixed" height={64} width={64} />
                 </div>
@@ -28,6 +29,6 @@ export default function Contribute({
                     <p className="">{message}</p>
                 </div>
             </PopButton>
-        </div>
+        </a>
     );
 }
