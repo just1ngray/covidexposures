@@ -96,7 +96,7 @@ const items = [
         href: "/status"
     },
     {
-        title: "Heatmap",
+        title: "Hot Spots",
         href: "/heatmap"
     },
     {
