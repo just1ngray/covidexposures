@@ -1,7 +1,7 @@
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 
-export default function Container({ className, children }) {
+export default function Container({ className = "", children }) {
     return (
         <div className="flex flex-col h-screen">
             <Navbar />
