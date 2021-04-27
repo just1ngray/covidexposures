@@ -20,7 +20,7 @@ export default function ScraperStatus({ scraper }: ScraperProps) {
                 <span className="float-right text-xs font-thin">{scraper.language}</span>
                 {scraper.country} {name}
             </h3>
-            <div className="underline text-blue-400">{scraper.URL}</div>
+            <div className="underline text-blue-500">{scraper.URL}</div>
 
             <div className="text-gray-600 text-left">
                 <p>First Checked: {new Date(scraper.firstScrape).toLocaleString()}</p>
