@@ -13,6 +13,7 @@ import {
 } from "react";
 import axios from "axios";
 import { Types } from "mongoose";
+import Head from "next/head";
 
 import Container from "../components/Container";
 import { Coordinate } from '../database/Coordinate';
@@ -96,17 +97,30 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
     }
 
     return (
-        <Container className="overflow-hidden">
+        <Container>
+            <Head>
+                {/* <script src='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script> */}
+                <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+            </Head>
+
             <ReactMapGL mapboxApiAccessToken={apiKey}
                 width="100%" height="100%"
                 mapStyle="mapbox://styles/mapbox/streets-v11"
                 {...viewport} 
                 onViewportChange={(vp) => {
-                    setViewport(vp);
+                    setViewport({
+                        longitude: vp.longitude,
+                        latitude: vp.latitude,
+                        zoom: vp.zoom
+                    });
                     findExposures();
                 }}
                 ref={mapRef}
                 onClick={getClickedExposure}
+
+                // This clearly shows how the Safari browser incorrectly displays the map
+                // TODO: fix somehow
+                className="py-96 bg-gray-300"
             >
                 <NavigationControl 
                     showZoom={true}
