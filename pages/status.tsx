@@ -58,7 +58,8 @@ export async function getStaticProps() {
                     name: s.name,
                     country: emoji(s.country.split(",")[0]),
                     language: s.language.split(",")[0],
-                    count: (s as any).count
+                    count: (s as any).count,
+                    tags: s.tags
                 }
             }),
             updated: Date.now()

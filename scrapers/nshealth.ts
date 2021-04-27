@@ -2,18 +2,19 @@ import puppeteer from "puppeteer";
 import { DateTime } from "luxon";
 
 import { ExposureModel, Exposure } from "../database/Exposure";
-import { ScrapingConfig } from "../database/Scraper";
+import { ScrapingConfig, ScraperTags } from "../database/Scraper";
 
 // scraping configuration information
-export const config = {
+export const config: ScrapingConfig = {
     URL: "http://www.nshealth.ca/covid-exposures",
     country: "CA",
     language: "en",
     center: {
         long: -63.582687,
         lat: 44.651070
-    }
-} as ScrapingConfig;
+    },
+    tags: [ScraperTags.NO_BUSSES, ScraperTags.NO_FLIGHTS]
+};
 
 // the main function which searches the page and parses Exposure documents
 export async function scrape(page: puppeteer.Page, millis: number): Promise<Exposure[]> {

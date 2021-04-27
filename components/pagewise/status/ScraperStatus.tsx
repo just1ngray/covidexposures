@@ -28,6 +28,16 @@ export default function ScraperStatus({ scraper }: ScraperProps) {
                 <p># Exposures Tracked: {scraper.count}</p>
             </div>
 
+            <div className="mt-2 -mb-0.5">
+                {scraper.tags.map((t, i) => 
+                    <span key={i} className="
+                        text-xs font-light
+                        mr-1 px-1 py-0.5
+                        rounded-xl border border-gray-800
+                    ">{t}</span>)
+                }
+            </div>
+
             <div className="flex flex-row items-center w-full absolute right-1 bottom-1">
                 <p className="pr-1 flex-grow text-right text-gray-500 text-xs">
                     {scraper.isActive ? "Active" : "Inactive"}

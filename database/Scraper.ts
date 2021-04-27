@@ -5,6 +5,33 @@ import { ExposureModel, Exposure } from "./Exposure";
 import { CoordinateSchema } from "./Coordinate";
 
 
+/** each file in ./scrapers must export a config object of this type */
+export interface ScrapingConfig {
+    /** where the scraper looks */
+    URL: string,
+
+    /** comma-separated country of the exposure: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 */
+    country: string,
+
+    /** comma-separated language of the address: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes */
+    language: string,
+
+    /** the center of the health region */
+    center: {
+        long: number,
+        lat: number
+    },
+
+    /** tags associated with how the scraper works */
+    tags: ScraperTags[]
+}
+
+/** standardized scraping tags */
+export enum ScraperTags {
+    NO_FLIGHTS = "NO_FLIGHTS",
+    NO_BUSSES = "NO_BUSSES"
+}
+
 export interface Scraper extends Document {
     /** where the scraper looks */
     URL: string,
@@ -29,6 +56,9 @@ export interface Scraper extends Document {
 
     /** the center of the health region */
     center: { long: number | null, lat: number | null },
+
+    /** tags associated with how the scraper works */
+    tags: ScraperTags[],
 
     /** scrapes the webpage for new exposures & adds them if possible */
     scrape: (millis?: number) => Promise<number>;
@@ -75,6 +105,12 @@ const ScraperSchema = new Schema({
             long: null,
             lat: null
         }
+    },
+    tags: {
+        type: [String],
+        enum: ScraperTags,
+        required: false,
+        default: []
     }
 });
 
@@ -125,20 +161,3 @@ ScraperSchema.methods.scrape = async function(millis: number = 0): Promise<numbe
 }
 
 export const ScraperModel = models.Scraper || model("Scraper", ScraperSchema);
-
-export interface ScrapingConfig {
-    /** where the scraper looks */
-    URL: string,
-
-    /** comma-separated country of the exposure: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 */
-    country: string,
-
-    /** comma-separated language of the address: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes */
-    language: string,
-
-    /** the center of the health region */
-    center: {
-        long: number,
-        lat: number
-    }
-}
