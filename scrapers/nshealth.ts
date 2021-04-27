@@ -29,12 +29,13 @@ export async function scrape(page: puppeteer.Page, millis: number): Promise<Expo
 
     const exposures = tableRows
         .filter((row) => row.length == 7)
+        .filter((row) => !isBusOrPlane(row[0]))
         .map((row) => {
             const time = parseTime(row[1]);
 
             const exposure = new ExposureModel({
                 name: row[0],
-                address: specialCaseAddr(row[0]) ?? row[2],
+                address: row[2],
                 instructions: row[4],
                 epoch: time.epoch,
                 width: time.width
@@ -47,15 +48,9 @@ export async function scrape(page: puppeteer.Page, millis: number): Promise<Expo
     return Promise.resolve(exposures);
 }
 
-function specialCaseAddr(name: string): string | null {
+function isBusOrPlane(name: string): boolean {
     name = name.toLowerCase().replace(/[^a-z]/g, "");
-
-    if (name.includes("halifaxtransit"))
-        return "200 Ilsley Ave, Dartmouth, NS B3B 1V1";
-    else if (name.includes("flight"))
-        return "747 Bell Blvd, Goffs, NS B2T 1K2";
-
-    return null;
+    return name.includes("halifaxtransit") || name.includes("flight")
 }
 
 function parseTime(time: string): { epoch: number, width: number } {
