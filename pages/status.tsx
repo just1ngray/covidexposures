@@ -44,7 +44,6 @@ export async function getStaticProps() {
                 .then((n) => (s as any).count = n)
         );
     await Promise.all(addCounts);
-    await db.disconnect();
 
     scrapers.sort((a, b) => Number(a.isActive) - Number(b.isActive))
 
