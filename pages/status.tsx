@@ -5,7 +5,7 @@ import ScraperStatus from "../components/pagewise/status/ScraperStatus"
 import { ScraperModel, Scraper } from "../database/Scraper";
 import { ExposureModel } from "../database/Exposure";
 import * as db from "../database/db";
-import Contribute from "../components/Contribute";
+import Contribute from "../components/pagewise/status/Contribute";
 
 interface Props {
     scrapers: [Scraper & { count: number}],
