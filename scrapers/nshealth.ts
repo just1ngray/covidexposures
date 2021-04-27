@@ -48,7 +48,7 @@ export async function scrape(page: puppeteer.Page, millis: number): Promise<Expo
 }
 
 function specialCaseAddr(name: string): string | null {
-    name = name.toLowerCase().replaceAll(/[^a-z]/, "");
+    name = name.toLowerCase().replace(/[^a-z]/g, "");
 
     if (name.includes("halifaxtransit"))
         return "200 Ilsley Ave, Dartmouth, NS B3B 1V1";
