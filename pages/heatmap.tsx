@@ -103,6 +103,11 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
                 <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
             </Head>
 
+            <p>
+                Showing COVID exposure locations since {` `}
+                {new Date(Date.now() - 1000*60*60*24*30).toLocaleDateString()}.
+            </p>
+
             <ReactMapGL mapboxApiAccessToken={apiKey}
                 width="100%" height="100%"
                 mapStyle="mapbox://styles/mapbox/streets-v11"

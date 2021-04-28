@@ -9,6 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(404).send("Please send as a PUT request");
 
     const { sw_long, sw_lat, ne_long, ne_lat, known_ids } = req.body;
+    const since = Date.now() - 1000*60*60*24*31;
 
     await db.connect();
     const exposures = await ExposureModel.find({
@@ -20,7 +21,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             $gte: sw_long,
             $lte: ne_long
         },
-        "coord._id": { $nin: known_ids }
+        "coord._id": { $nin: known_ids },
+        epoch: { $gte: since }
     }).select("coord -_id") as Exposure[];
 
     const coords = exposures.map((e) => {
