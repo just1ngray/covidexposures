@@ -12,6 +12,12 @@ if (!fs.existsSync("./keys.ts")) fs.writeFileSync("./keys.ts",
     mailjet: {
         key: "MAILJET_MAIN_ACCOUNT_API_KEY",
         secret: "MAILJET_MAIN_ACCOUNT_SECRET_KEY"
+    },
+    google: {
+        oauth: {
+            id: "OAUTH_CLIENT_ID",
+            secret: "OAUTH_CLIENT_SECRET"
+        }
     }
 };`);
 
@@ -24,8 +30,8 @@ if (!fs.existsSync("./keys.ts")) fs.writeFileSync("./keys.ts",
         process.exit(0);
     });
 
-    worker(11, 19, scraping);
-    worker(3, 7, geocoding);
-    // worker(0, 2, scraping);
-    // worker(0, 0.5, geocoding);
+    // worker(11, 19, scraping);
+    // worker(3, 7, geocoding);
+    worker(0, 2, scraping);
+    worker(0, 0.5, geocoding);
 })();

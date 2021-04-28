@@ -4,8 +4,8 @@ import { Exposure } from "../../../database/Exposure";
 interface Props {
     /* overlapping exposure */
     exposure: Exposure & { all: {
-        epoch: number,
-        width: number,
+        start: number,
+        end: number,
         instructions: string
     }[] },
     close: () => void
@@ -29,11 +29,11 @@ export default function MoreInfo({ exposure, close }: Props) {
 
                 <ol className="text-xs text-gray-600 tracking-tight">
                     {exposure.all.map((doc, i) => 
-                        <li key={doc.epoch} className="mb-2">
+                        <li key={i} className="mb-2">
                             <span className="inline-block align-text-top">
-                                {new Date(doc.epoch).toLocaleString()}
+                                {new Date(doc.start).toLocaleString()}
                                 {" to "}
-                                {new Date(doc.epoch + doc.width).toLocaleString()}
+                                {new Date(doc.end).toLocaleString()}
                                 <p className="text-gray-400">{exposure.instructions}</p>
                             </span>
                         </li>

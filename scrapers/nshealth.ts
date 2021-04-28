@@ -32,19 +32,19 @@ export async function scrape(page: puppeteer.Page, millis: number): Promise<Expo
         .filter((row) => row.length == 7)
         .filter((row) => !isBusOrPlane(row[0]))
         .map((row) => {
-            const time = parseTime(row[1]);
+            const { start, end } = parseTime(row[1]);
 
             const exposure = new ExposureModel({
                 name: row[0],
                 address: row[2],
                 instructions: row[4],
-                epoch: time.epoch,
-                width: time.width
+                start,
+                end
             }) as Exposure;
 
             return exposure;
         })
-        .filter((exposure: Exposure) => exposure.epoch >= millis);
+        .filter((exposure: Exposure) => exposure.start >= millis);
 
     return Promise.resolve(exposures);
 }
@@ -54,7 +54,7 @@ function isBusOrPlane(name: string): boolean {
     return name.includes("halifaxtransit") || name.includes("flight")
 }
 
-function parseTime(time: string): { epoch: number, width: number } {
+function parseTime(time: string): { start: number, end: number } {
     const t = time.split(" ");
     const a = DateTime.fromFormat(`${t[1]} ${t[3]}`, "MM/dd/yyyy HH:mm", {
         zone: "America/Halifax"
@@ -64,7 +64,7 @@ function parseTime(time: string): { epoch: number, width: number } {
     });
 
     return { 
-        epoch: a.toMillis(), 
-        width: b.toMillis() - a.toMillis()
+        start: a.toMillis(), 
+        end: b.toMillis()
     };
 }

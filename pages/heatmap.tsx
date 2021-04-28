@@ -80,8 +80,8 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
     const geojson = useMemo(() => generateGeojson(cache.exposures), [cache.exposures]);
 
     const [clickedExposure, setClickedExposure] = useState<Exposure & { all: {
-        epoch: number,
-        width: number,
+        start: number,
+        end: number,
         instructions: string
     }[] } | null>(null);
     async function getClickedExposure(e: MapEvent) {
@@ -92,7 +92,7 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
         if (!Types.ObjectId.isValid(properties._id))
             return setClickedExposure(null);
 
-        const { data } = await axios.get(`/api/exposure/by-coord/${properties._id}`);
+        const { data } = await axios.get(`/api/exposure/${properties._id}`);
         setClickedExposure(data);
     }
 

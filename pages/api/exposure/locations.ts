@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             $lte: ne_long
         },
         "coord._id": { $nin: known_ids },
-        epoch: { $gte: since }
+        end: { $gte: since }
     }).select("coord -_id") as Exposure[];
 
     const coords = exposures.map((e) => {

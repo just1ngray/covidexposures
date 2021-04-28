@@ -14,10 +14,10 @@ export interface Exposure extends Document {
     address: string,
 
     /** millis since epoch GMT+0 exposure start time */
-    epoch: number,
+    start: number,
 
-    /** millis of exposure window (epoch + width = exposure end time) */
-    width: number,
+    /** millis since epoch GMT+0 exposure end time */
+    end: number,
 
     /** the coordinates of the exposure location */
     coord: Coordinate,
@@ -30,8 +30,7 @@ export const ExposureSchema = new Schema({
     scraper: {
         type: Types.ObjectId,
         ref: "Scraper",
-        required: true,
-        default: null
+        required: true
     },
     name: {
         type: String,
@@ -42,15 +41,15 @@ export const ExposureSchema = new Schema({
         required: true,
         trim: true
     },
-    epoch: {
+    start: {
         type: Number,
         min: 0,
         required: true
     },
-    width: {
+    end: {
         type: Number,
-        min: 1,
-        default: 8.64*10**7
+        min: 0,
+        required: true
     },
     coord: {
         type: CoordinateSchema,

@@ -3,7 +3,14 @@ import Container from '../components/Container';
 export default function Home() {
     return (
         <Container>
-            <p>Content to come</p>
+            What is this?!
         </Container>
     );
+}
+
+export function getStaticProps() {
+    return {
+        props: {},
+        revalidate: 60*60*6 // 6 hours
+    }
 }

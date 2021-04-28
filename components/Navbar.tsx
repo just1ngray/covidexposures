@@ -2,14 +2,26 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
+import { useLogin } from "../util/frontend/credentials";
 
 export default function Navbar() {
+    const creds = useLogin();
+
     const router = useRouter();
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     function toggle() {
         setIsOpen((current) => !current);
     }
+
+    const items = [
+        { title: "Home", href: "/" },
+        { title: "Status", href: "/status" },
+        { title: "Hot Spots", href: "/heatmap" },
+        creds == null
+            ? { title: "Login", href: "/login" }
+            : { title: "Your Locations", href: "/dashboard" }
+    ];
 
     return (
         <nav className="
@@ -85,26 +97,3 @@ function NavItem({ href, title, isActive }: Props) {
         </li>
     );
 }
-
-const items = [
-    {
-        title: "Home",
-        href: "/"
-    },
-    {
-        title: "Status",
-        href: "/status"
-    },
-    {
-        title: "Hot Spots",
-        href: "/heatmap"
-    },
-    {
-        title: "Look Up",
-        href: "/lookup"
-    },
-    {
-        title: "Login",
-        href: "/login"
-    },
-];

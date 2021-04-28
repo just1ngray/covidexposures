@@ -142,8 +142,8 @@ ScraperSchema.methods.scrape = async function(millis: number = 0): Promise<numbe
         const exists = ExposureModel.exists({ 
             name: exposure.name,
             address: exposure.address,
-            epoch: exposure.epoch,
-            width: exposure.width
+            start: exposure.start,
+            end: exposure.end
         });
         existsQueries.push(exists);
     }
