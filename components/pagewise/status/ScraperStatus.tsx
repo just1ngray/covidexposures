@@ -14,7 +14,7 @@ export default function ScraperStatus({ scraper }: ScraperProps) {
             <PopButton className="
                 shadow-lg p-2 rounded-md
                 flex flex-col
-                w-full md:w-auto
+                w-full
                 truncate
             ">
                 <h3 className="mt-2 text-4xl text-left border-b-2 font-medium w-full">
