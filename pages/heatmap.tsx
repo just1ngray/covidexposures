@@ -214,7 +214,7 @@ function getHeatmapIntensity(zoom: number): number {
  * @returns the heatmap intensity [0,1]
  */
 function getCircleOpacity(zoom: number): number {
-    return Math.max(0, zoom - 12);
+    return Math.max(0, Math.min(1, zoom - 12));
 }
 
 /**
