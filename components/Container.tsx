@@ -20,7 +20,7 @@ export default function Container({ className = "", children, authRequired = fal
             <main className={`
                 flex flex-col 
                 flex-grow container mx-auto px-2 
-                relative
+                relative h-0
                 ${className}
             `}>
                 {creds && <div className="flex flex-row-reverse pr-4 -mt-2">

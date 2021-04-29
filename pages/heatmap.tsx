@@ -99,7 +99,6 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
     return (
         <Container>
             <Head>
-                {/* <script src='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script> */}
                 <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
             </Head>
 
@@ -122,10 +121,6 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
                 }}
                 ref={mapRef}
                 onClick={getClickedExposure}
-
-                // This clearly shows how the Safari browser incorrectly displays the map
-                // TODO: fix somehow
-                className="py-96 bg-gray-300"
             >
                 <NavigationControl 
                     showZoom={true}
