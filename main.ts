@@ -14,10 +14,7 @@ if (!fs.existsSync("./keys.ts")) fs.writeFileSync("./keys.ts",
         secret: "MAILJET_MAIN_ACCOUNT_SECRET_KEY"
     },
     google: {
-        oauth: {
-            id: "OAUTH_CLIENT_ID",
-            secret: "OAUTH_CLIENT_SECRET"
-        }
+        oauth: "OAUTH_CLIENT_ID"
     }
 };`);
 

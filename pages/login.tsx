@@ -60,7 +60,7 @@ export default function Login({ clientId }) {
 export function getStaticProps() {
     return {
         props: {
-            clientId: keys.google.oauth.id
+            clientId: keys.google.oauth
         }
     };
 }
