@@ -8,7 +8,7 @@ export interface Subscription extends Document {
     account: Types.ObjectId & Account,
 
     /** the center of the location */
-    coords: Coordinate,
+    coord: Coordinate,
 
     /** the radius of the exposure area in metres */
     radius: number,
@@ -26,7 +26,7 @@ export const SubscriptionSchema = new Schema({
         ref: "Account",
         required: true
     },
-    coords: {
+    coord: {
         type: CoordinateSchema,
         required: true
     },
