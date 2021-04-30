@@ -29,10 +29,5 @@ export default async function getExposuresWithin(
         "end": { $lte: end }
     }).lean() as Exposure[];
 
-    return exposures.map((e) => {
-        return {
-            ...e,
-            _id: e.toString()
-        }
-    });
+    return exposures;
 }

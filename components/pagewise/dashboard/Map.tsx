@@ -5,8 +5,7 @@ import ReactMapGL, {
     Source,
     MapEvent,
     Marker,
-    WebMercatorViewport,
-    Popup
+    WebMercatorViewport
 } from "react-map-gl";
 import Image from "next/image";
 import { 
@@ -17,6 +16,8 @@ import {
 import getBoundsOfDistance from "geolib/es/getBoundsOfDistance";
 
 import { Subscription } from "../../../database/Subscription";
+import mToPx from "../../../util/frontend/mToPx";
+import SubscriptionInfo from "./SubscriptionInfo";
 
 interface Props {
     apiKey: string,
@@ -90,7 +91,7 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
         setViewport({ longitude, latitude, zoom });
     }, [newSubscription.radius]);
 
-    const [popupDetails, setPopupDetails] = useState<Subscription>(null);
+    const [popupSubscriptionDetails, setPopupSubscriptionDetails] = useState<Subscription>(null);
 
     return (
         <ReactMapGL mapboxApiAccessToken={apiKey}
@@ -104,7 +105,7 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
                 latitude: vp.latitude, 
                 zoom: vp.zoom 
             })}
-            onClick={() => setPopupDetails(null)}
+            onClick={() => setPopupSubscriptionDetails(null)}
             doubleClickZoom={false}
             onDblClick={moveMarker}
             ref={mapRef}
@@ -125,66 +126,21 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
                     latitude={s.coord.lat}
                 >
                     <Image draggable={false} 
-                        src="/mapbox-marker-icon-gray.svg" 
+                        src={s.exposures.length > 0 ? "/mapbox-marker-icon-red.svg" : "/mapbox-marker-icon-gray.svg"}
                         width={50} height={50}
                         className="cursor-pointer"
                         onClick={() => {
-                            setPopupDetails(s);
+                            setPopupSubscriptionDetails(s);
                         }}
-                        onBlur={() => setPopupDetails(null)}
+                        onBlur={() => setPopupSubscriptionDetails(null)}
                     />
                 </Marker>
             )}
-            {popupDetails && 
-                <Source type="geojson" data={{
-                        type: "Feature",
-                        geometry: {
-                            type: "Point",
-                            coordinates: [popupDetails.coord.long, popupDetails.coord.lat]
-                        },
-                        properties: {}
-                    }}>
-                    <Layer type="circle" paint={{
-                        "circle-radius": {
-                            stops: [
-                                [0, 0],
-                                [20, metersToPixelsAtMaxZoom(popupDetails.radius, popupDetails.coord.lat)]
-                            ],
-                            base: 2
-                        },
-                        "circle-color": "gray",
-                        "circle-opacity": 0.5,
-                        "circle-opacity-transition": { delay: 100, duration: 300 },
-                        "circle-stroke-width": viewport.zoom / 5,
-                        "circle-stroke-color": "gray",
-                        "circle-stroke-opacity-transition": { delay: 100, duration: 300 }
-                    }} />
-                    <Popup latitude={popupDetails.coord.lat}
-                        longitude={popupDetails.coord.long}
-                        onClose={() => setPopupDetails(null)}
-                    >
-                        <div className="max-w-xs text-sm text-center">
-                            <div className="flex flex-wrap justify-center">
-                                <span>{new Date(popupDetails.start).toLocaleString()}</span>
-                                <span className="mx-2">to</span>
-                                <span>{new Date(popupDetails.end).toLocaleString()}</span>
-                            </div>
-                            <hr />
-                            <p>Created on: {new Date((popupDetails as any).createdAt).toLocaleString()}</p>
-
-                            <button type="button" 
-                                onClick={() => unsubscribe(popupDetails)}
-                                className="
-                                    hover:bg-red-700 hover:text-gray-50
-                                    bg-red-400 rounded
-                                    p-2 mx-auto mt-3
-                            ">
-                                Remove Subscription
-                            </button>
-                        </div>
-                    </Popup>
-                </Source>
-            }
+            <SubscriptionInfo subscription={popupSubscriptionDetails}
+                setSubscription={setPopupSubscriptionDetails}
+                vpZoom={viewport.zoom}
+                unsubscribe={unsubscribe}
+            />
 
             {/* Add a new location */}
             <Marker draggable
@@ -211,7 +167,7 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
                     "circle-radius": {
                         stops: [
                             [0, 0],
-                            [20, metersToPixelsAtMaxZoom(newSubscription.radius, newSubscription.coord.lat)]
+                            [20, mToPx(newSubscription.radius, newSubscription.coord.lat)]
                         ],
                         base: 2
                     },
@@ -226,31 +182,4 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
             </Source>
         </ReactMapGL>
     );
-}
-
-/**
- * https://stackoverflow.com/a/37794326
- * This is a great function! I just added typescript annotations
- */
-const metersToPixelsAtMaxZoom = (meters: number, latitude: number) =>
-    meters / 0.075 / Math.cos(latitude * Math.PI / 180);
-
-function generateGeojson(subscriptions: Subscription[] = []): GeoJSON.FeatureCollection {
-    return {
-        type: "FeatureCollection",
-        features: (subscriptions ?? []).map((sub) => {
-            return {
-                type: "Feature",
-                geometry: {
-                    type: "Point",
-                    coordinates: [sub.coord.long, sub.coord.lat]
-                },
-                properties: {
-                    start: sub.start,
-                    end: sub.end,
-                    radius: sub.radius
-                }
-            }
-        })
-    };
 }

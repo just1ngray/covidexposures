@@ -2,6 +2,7 @@ import { Schema, model, Document, Types, models } from "mongoose";
 
 import { Account } from "./Account";
 import { Coordinate, CoordinateSchema } from "./Coordinate";
+import { Exposure } from "./Exposure";
 
 export interface Subscription extends Document {
     /** the account associated with this subscription */
@@ -17,7 +18,10 @@ export interface Subscription extends Document {
     start: number,
 
     /** epoch millis when the subscription ends */
-    end: number
+    end: number,
+
+    /** any assigned exposures found to match this subscription */
+    exposures: [Types.ObjectId & Exposure]
 }
 
 export const SubscriptionSchema = new Schema({
@@ -41,6 +45,13 @@ export const SubscriptionSchema = new Schema({
     end: {
         type: Number,
         required: true
+    },
+    exposures: {
+        type: [{
+            type: Types.ObjectId,
+            ref: "Exposure"
+        }],
+        default: []
     },
     createdAt: {
         type: Date,

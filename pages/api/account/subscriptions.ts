@@ -4,6 +4,7 @@ import * as db from "../../../database/db";
 import validateCredentials from "../../../util/backend/validateCredentials";
 import { Subscription, SubscriptionModel } from "../../../database/Subscription";
 import { Account, AccountModel } from "../../../database/Account";
+import { ExposureModel } from "../../../database/Exposure";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method != "PUT") 
@@ -20,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const subscriptions = await SubscriptionModel.find({ account: account._id })
+            .populate({ path: "exposures", model: ExposureModel })
             .lean() as Subscription[];
 
         res.send(subscriptions);
