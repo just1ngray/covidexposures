@@ -25,7 +25,7 @@ export default function Navbar() {
 
     return (
         <nav className="
-            flex flex-wrap 
+            flex flex-wrap flex-shrink-0
             xl:justify-center items-center 
             bg-gray-800
         ">

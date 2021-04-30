@@ -5,7 +5,8 @@ export default function Footer() {
     return (
         <footer className="
             bg-gray-300 border-t border-gray-400 
-            flex flex-wrap items-center justify-evenly
+            flex flex-wrap flex-shrink-0
+            items-center justify-evenly
             p-4
         ">
             <section className="w-full md:w-6/12 lg:w-1/3">

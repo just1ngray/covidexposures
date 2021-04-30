@@ -1,29 +1,34 @@
-import jwt from "jsonwebtoken";
+import axios from "axios";
 
-import keys from "../../keys";
 import { Credentials } from "../frontend/credentials";
 
 /**
- * Validates a JWT
+ * Validates the token with the provider
  * @param creds the credentials to validate
- * @returns null if invalid or not verified, and [name, email] as strings if valid
+ * @returns [name, email] if valid
  */
- export async function validateCredentials(creds: Credentials): Promise<[string, string]> {
-    try {
-        switch (creds.provider) {
-            case "google": {
-                const { email, email_verified, name } = 
-                    jwt.verify(creds.token, keys.google.oauth.secret) as { 
-                        email: string, 
-                        email_verified: boolean, 
-                        name: string
-                    };
-                    
-                if (!email_verified) return null;
-                return [name, email];
+ export default async function validateCredentials(creds: Credentials): Promise<[string, string]> {
+    switch (creds.provider) {
+        case "google": {
+            interface Success {
+                email: string,
+                email_verified: boolean,
+                name: string
             }
+
+            const { data } = await axios.get(
+                `https://oauth2.googleapis.com/tokeninfo?id_token=${creds.token}`
+            );
+            if (data.error) throw new Error(`${data.error}: ${data.error_description}`);
+
+            const success = data as Success;
+
+            if (!success.email_verified) throw new Error("Unverified email address");
+            return [success.name, success.email];
         }
-    } catch {
-        return null;
+
+        default: {
+            throw new Error("Unrecognized OAuth provider");
+        }
     }
 }

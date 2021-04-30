@@ -97,68 +97,73 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
     }
 
     return (
-        <Container>
+        <Container className="h-screen">
             <Head>
                 <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
             </Head>
 
-            <p>
-                Showing COVID exposure locations since {` `}
-                {new Date(Date.now() - 1000*60*60*24*30).toLocaleDateString()}.
-            </p>
+            <div className="h-full pb-12">
+                <p className="text-center">
+                    Showing COVID exposure locations since {` `}
+                    {new Date(Date.now() - 1000*60*60*24*30).toLocaleDateString()}.
+                </p>
 
-            <ReactMapGL mapboxApiAccessToken={apiKey}
-                width="100%" height="100%"
-                mapStyle="mapbox://styles/mapbox/streets-v11"
-                {...viewport} 
-                onViewportChange={(vp) => {
-                    setViewport({
-                        longitude: vp.longitude,
-                        latitude: vp.latitude,
-                        zoom: vp.zoom
-                    });
-                    findExposures();
-                }}
-                ref={mapRef}
-                onClick={getClickedExposure}
-            >
-                <NavigationControl 
-                    showZoom={true}
-                    showCompass={false} 
-                />
-                <FullscreenControl className="right-0" />
+                
+                <ReactMapGL mapboxApiAccessToken={apiKey}
+                    reuseMaps
+                    dragRotate={false}
+                    width="100%" height="100%"
+                    mapStyle="mapbox://styles/mapbox/streets-v11"
+                    {...viewport} 
+                    onViewportChange={(vp) => {
+                        setViewport({
+                            longitude: vp.longitude,
+                            latitude: vp.latitude,
+                            zoom: vp.zoom
+                        });
+                        findExposures();
+                    }}
+                    ref={mapRef}
+                    onClick={getClickedExposure}
+                >
+                    <NavigationControl 
+                        showZoom={true}
+                        showCompass={false} 
+                    />
+                    <FullscreenControl className="right-0" />
 
-                <Source type="geojson" data={geojson}>
-                    <Layer type="circle" paint={{
-                        "circle-radius": 15,
-                        "circle-opacity": getCircleOpacity(viewport.zoom),
-                        "circle-stroke-opacity": getCircleOpacity(viewport.zoom),
-                        "circle-stroke-width": 1,
-                        "circle-color": "#fff",
-                    }} />
-                    
-                    <Layer type="heatmap" paint={{
-                        "heatmap-color": [
-                            "interpolate", ["linear"],
-                            ["heatmap-density"],
-                            0, "rgba(0, 0, 255, 0)",
-                            0.1, "royalblue",
-                            0.3, "cyan",
-                            0.5, "lime",
-                            0.7, "yellow",
-                            1, "red"
-                        ],
-                        "heatmap-intensity": getHeatmapIntensity(viewport.zoom), 
-                        "heatmap-opacity": 0.67,
-                        "heatmap-radius": 30
-                    }} />
-                </Source>
+                    <Source type="geojson" data={geojson}>
+                        <Layer type="circle" paint={{
+                            "circle-radius": 15,
+                            "circle-opacity": getCircleOpacity(viewport.zoom),
+                            "circle-stroke-opacity": getCircleOpacity(viewport.zoom),
+                            "circle-stroke-width": 1,
+                            "circle-color": "#fff",
+                        }} />
+                        
+                        <Layer type="heatmap" paint={{
+                            "heatmap-color": [
+                                "interpolate", ["linear"],
+                                ["heatmap-density"],
+                                0, "rgba(0, 0, 255, 0)",
+                                0.1, "royalblue",
+                                0.3, "cyan",
+                                0.5, "lime",
+                                0.7, "yellow",
+                                1, "red"
+                            ],
+                            "heatmap-intensity": getHeatmapIntensity(viewport.zoom), 
+                            "heatmap-opacity": 0.67,
+                            "heatmap-radius": 30
+                        }} />
+                    </Source>
 
-                {clickedExposure && <MoreInfo 
-                    exposure={clickedExposure} 
-                    close={() => setClickedExposure(null)} 
-                />}
-            </ReactMapGL>
+                    {clickedExposure && <MoreInfo 
+                        exposure={clickedExposure} 
+                        close={() => setClickedExposure(null)} 
+                    />}
+                </ReactMapGL>
+            </div>
         </Container>
     );
 }

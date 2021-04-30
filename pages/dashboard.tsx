@@ -1,19 +1,101 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Head from "next/head";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import Container from "../components/Container";
-import { useLogin } from "../util/frontend/credentials";
+import { useLogin, logout } from "../util/frontend/credentials";
+import { Subscription } from "../database/Subscription";
+import keys from "../keys";
+import Map from "../components/pagewise/dashboard/Map";
+import RadiusSlider from "../components/pagewise/dashboard/RadiusSlider";
+import PopButton from "../components/PopButton";
 
-export default function Dashboard() {
+export default function Dashboard({ apiKey }) {
     const creds = useLogin();
 
+    const [subs, setSubs] = useState<Subscription[]>(null);
+    useEffect(() => {
+        if (creds == undefined) return;
+        axios.put("/api/account/subscriptions", { credentials: creds })
+            .then(({ data }) => setSubs(data))
+            .catch(logout);
+    }, [creds]);
+
+    const [newSub, setNewSub] = useState<Subscription>({
+        start: Date.now(),
+        end: Date.now() + 1000*60*60*6,
+        coord: { long: -63.582687, lat: 44.651070 },
+        radius: 300
+    } as any);
+    function changeNewSub(changes: Partial<Subscription>) {
+        setNewSub({ ...newSub, ...changes } as any);
+    }
+
+    function subscribe(e) {
+        e.preventDefault();
+    }
+    
     return (
         <Container authRequired>
-            <p>Hello</p>
+            <Head>
+                <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+            </Head>
+
+            <form onSubmit={subscribe}>
+                <div className="h-96 md:w-3/4 xl:w-2/4 mx-auto">
+                    <Map apiKey={apiKey}
+                        subs={subs}
+                        newSubscription={newSub}
+                        changeNewSubscription={changeNewSub}
+                    />
+                </div>
+
+                <RadiusSlider radius={newSub.radius} 
+                    setRadius={(r: number) => changeNewSub({ radius: r })} 
+                />
+
+                <div className="md:flex justify-center items-center">
+                    <span className="w-full md:w-auto inline-block text-center">
+                        <DatePicker 
+                            selected={new Date(newSub.start)} 
+                            onChange={(date: Date) => changeNewSub({ start: date.getTime() })} 
+                            showTimeSelect
+                            dateFormat="Pp"
+                            className="
+                                cursor-pointer border rounded
+                                hover:bg-gray-200 border-gray-300
+                                p-1 text-right
+                        "/>
+                    </span>
+                    <p className="text-center mx-2">to</p>
+                    <span className="w-full md:w-auto inline-block text-center">
+                        <DatePicker 
+                            selected={new Date(newSub.end)}
+                            onChange={(date: Date) => changeNewSub({ end: date.getTime() })} 
+                            showTimeSelect
+                            dateFormat="Pp"
+                            className="p-1
+                                cursor-pointer border rounded
+                                hover:bg-gray-200 border-gray-300
+                        "/>
+                    </span>
+                </div>
+
+                <PopButton type="submit">
+                    Subscribe
+                </PopButton>
+            </form>
         </Container>
     );
 }
 
 export function getStaticProps() {
     return {
-        props: {}
-    };
+        props: {
+            apiKey: keys.mapbox
+        },
+        revalidate: 60*60*6 // 6 hours
+    }
 }

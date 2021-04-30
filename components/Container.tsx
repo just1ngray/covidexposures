@@ -15,12 +15,12 @@ export default function Container({ className = "", children, authRequired = fal
     }, [creds]);
 
     return (
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col min-h-screen">
             <Navbar />
             <main className={`
-                flex flex-col 
-                flex-grow container mx-auto px-2 
-                relative h-0
+                flex flex-col flex-grow flex-shrink-0
+                container mx-auto px-2 
+                relative
                 ${className}
             `}>
                 {creds && <div className="flex flex-row-reverse pr-4 -mt-2">
