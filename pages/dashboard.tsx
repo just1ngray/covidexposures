@@ -33,8 +33,18 @@ export default function Dashboard({ apiKey }) {
         setNewSub({ ...newSub, ...changes } as any);
     }
 
-    function subscribe(e) {
+    async function subscribe(e) {
         e.preventDefault();
+
+        const { data } = await axios.post("/api/account/subscribe", { credentials: creds, ...newSub });
+        setSubs([...subs, data]);
+    }
+
+    async function unsubscribe(subscription: Subscription) {
+        await axios.delete(`/api/account/${subscription._id}`, { data: {
+            credentials: creds
+        }});
+        setSubs(subs.filter((s) => s._id != subscription._id));
     }
     
     return (
@@ -49,6 +59,7 @@ export default function Dashboard({ apiKey }) {
                         subs={subs}
                         newSubscription={newSub}
                         changeNewSubscription={changeNewSub}
+                        unsubscribe={unsubscribe}
                     />
                 </div>
 
