@@ -4,10 +4,17 @@ import ReactMapGL, {
     Layer,
     Source,
     MapEvent,
-    Marker
+    Marker,
+    WebMercatorViewport
 } from "react-map-gl";
 import Image from "next/image";
-import { useMemo, useState, useEffect } from "react";
+import { 
+    useMemo, 
+    useState, 
+    useEffect, 
+    useRef 
+} from "react";
+import getBoundsOfDistance from "geolib/es/getBoundsOfDistance";
 
 import { Subscription } from "../../../database/Subscription";
 
@@ -68,6 +75,23 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
         changeNewSubscription({ coord: { long: e.lngLat[0], lat: e.lngLat[1] }} as any);
     }
 
+    const mapRef = useRef(null);
+    useEffect(() => {
+        if (mapRef.current == null) return;
+
+        const [sw, ne] = getBoundsOfDistance({ 
+            latitude: newSubscription.coord.lat,
+            longitude: newSubscription.coord.long
+        }, newSubscription.radius) as { longitude: number, latitude: number }[];
+
+        const { longitude, latitude, zoom } = new WebMercatorViewport(viewport as any)
+            .fitBounds([
+                [sw.longitude, sw.latitude],
+                [ne.longitude, ne.latitude]
+            ], { padding: -125 });
+        setViewport({ longitude, latitude, zoom });
+    }, [newSubscription.radius]);
+
     return (
         <ReactMapGL mapboxApiAccessToken={apiKey}
             dragRotate={false}
@@ -82,6 +106,7 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
             })}
             doubleClickZoom={false}
             onDblClick={moveMarker}
+            ref={mapRef}
         >
             {/* standard controls */}
             <NavigationControl 
