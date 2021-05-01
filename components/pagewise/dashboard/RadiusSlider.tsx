@@ -17,7 +17,6 @@ export default function RadiusSlider({ radius, setRadius }: Props) {
                     " 
                     type="number" value={radius}
                     onChange={(e) => setRadius(Number(e.target.value))} 
-                    step={100}
                 />
                 m
             </span>
