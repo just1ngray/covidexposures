@@ -28,9 +28,9 @@ export default function Login({ clientId }) {
                 shadow-xl p-4
             ">
                 <h3 className="font-semibold text-3xl text-center pb-1">Login</h3>
-                <p>
-                    Manually input the locations you've visited and receive email 
-                    notifications if an exposure has been detected in that area.
+                <p className="text-gray-700 text-center">
+                    Subscribe to locations you've recently visited. If a potential exposure
+                    is detected, you'll be notified via email.
                 </p>
 
                 <div className="border-t border-b border-gray-300 my-1 py-2 flex flex-col">
