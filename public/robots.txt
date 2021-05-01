@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /*.png$
+Disallow: /*.svg$
+Disallow: /heatmap
+Disallow: /dashboard
+
+User-agent: Googlebot-Image
+Disallow: /
