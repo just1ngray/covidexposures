@@ -21,7 +21,7 @@ export default function Footer() {
             <section className="w-full flex justify-center sm:w-2/4 lg:w-1/3">
                 <a href="https://github.com/just1ngray/covidexposures" className="flex items-center p-4">
                     <div className="inline-block">
-                        <Image src="/GitHub-Mark-64px.png" layout="fixed" height={48} width={48} />
+                        <Image src="/GitHub-Mark-64px.png" layout="fixed" height={48} width={48} alt="GitHub logo" />
                     </div>
                     <div className="pl-2">
                         <p className="text-xl font-semibold -mb-1">Contribute</p>

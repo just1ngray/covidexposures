@@ -71,6 +71,7 @@ function Feature({ src, height, width, children, text="RIGHT", href }: FeaturePr
                     <Image src={src} 
                         quality={5} priority
                         height={height} width={width}
+                        alt="Feature screenshot"
                     />
                 </div>
 

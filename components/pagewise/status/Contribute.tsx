@@ -22,7 +22,7 @@ export default function Contribute({
                 text-left
             ">
                 <div className="inline-block">
-                    <Image src="/GitHub-Mark-64px.png" layout="fixed" height={64} width={64} />
+                    <Image src="/GitHub-Mark-64px.png" layout="fixed" height={64} width={64} alt="GitHub logo" />
                 </div>
                 <div className="pl-2">
                     <p className="text-xl font-semibold">Contribute</p>

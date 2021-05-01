@@ -152,6 +152,7 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
                             setPopupSubscriptionDetails(s);
                         }}
                         onBlur={() => setPopupSubscriptionDetails(null)}
+                        alt="Previously created subscription"
                     />
                 </Marker>
             )}
@@ -177,6 +178,7 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
                     src="/mapbox-marker-icon-blue.svg" 
                     width={50} height={50}
                     className="cursor-move"
+                    alt="New subscription"
                 />
             </Marker>
 
