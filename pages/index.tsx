@@ -64,7 +64,7 @@ interface FeatureProps {
 function Feature({ src, height, width, children, text="RIGHT", href }: FeatureProps) {
     return (
         <Link href={href}>
-            <PopButton className="shadow-lg p-4 mb-4
+            <PopButton className="shadow-lg p-4 my-4
                 md:flex md:items-center md:justify-evenly
             ">
                 <div className="order-1 md:w-3/4">
