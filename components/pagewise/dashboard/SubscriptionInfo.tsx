@@ -101,33 +101,35 @@ function ExposurePage({ exposures, page, perPage, setPage }: ExposurePageProps) 
         <div>
             {toShow.map((e) => <ExposureJSX key={e._id} e={e} />)}
             
-            <div className="flex justify-center">
-                <button type="button" 
-                    disabled={page <= 0} 
-                    onClick={() => setPage(Math.max(0, page - 1))}
-                    className="
-                        border border-gray-400 rounded-l
-                        p-1.5 w-24
-                        disabled:opacity-40 disabled:cursor-not-allowed
-                        hover:bg-gray-100
-                ">
-                    {"< Previous"}
-                </button>
-                <span className="border-t border-b border-gray-400 p-1.5 w-16">
-                    {page+1}/{maxPages+1}
-                </span>
-                <button type="button" 
-                    disabled={page >= maxPages} 
-                    onClick={() => setPage(Math.min(maxPages, page + 1))}
-                    className="
-                        border border-gray-400 rounded-r
-                        p-1.5 w-24
-                        disabled:opacity-40 disabled:cursor-not-allowed
-                        hover:bg-gray-100
-                ">
-                    {"Next >"}
-                </button>
-            </div>
+            {maxPages > 1 &&
+                <div className="flex justify-center">
+                    <button type="button" 
+                        disabled={page <= 0} 
+                        onClick={() => setPage(Math.max(0, page - 1))}
+                        className="
+                            border border-gray-400 rounded-l
+                            p-1.5 w-24
+                            disabled:opacity-40 disabled:cursor-not-allowed
+                            hover:bg-gray-100
+                    ">
+                        {"< Previous"}
+                    </button>
+                    <span className="border-t border-b border-gray-400 p-1.5 w-16">
+                        {page+1}/{maxPages+1}
+                    </span>
+                    <button type="button" 
+                        disabled={page >= maxPages} 
+                        onClick={() => setPage(Math.min(maxPages, page + 1))}
+                        className="
+                            border border-gray-400 rounded-r
+                            p-1.5 w-24
+                            disabled:opacity-40 disabled:cursor-not-allowed
+                            hover:bg-gray-100
+                    ">
+                        {"Next >"}
+                    </button>
+                </div>
+            }
         </div>
     );
 }
