@@ -34,21 +34,25 @@ export const ExposureSchema = new Schema({
     },
     name: {
         type: String,
-        default: ""
+        default: "",
+        maxlength: 1024
     },
     address: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        maxlength: 1024
     },
     start: {
         type: Number,
         min: 0,
+        max: 4102459200000,
         required: true
     },
     end: {
         type: Number,
         min: 0,
+        max: 4102459200000,
         required: true
     },
     coord: {
@@ -61,6 +65,7 @@ export const ExposureSchema = new Schema({
     instructions: {
         type: String,
         default: "",
+        maxlength: 1024,
         trim: true
     }
 });
