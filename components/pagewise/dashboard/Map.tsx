@@ -50,6 +50,25 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
                 lat: coords.latitude,
                 long: coords.longitude
             } as any});
+        }, async () => {
+            // could not geocode... set to a previously found subscription location
+            const start = Date.now();
+            while (subs == undefined && start + 2000 < Date.now()) {
+                await new Promise<void>((resolve) => {
+                    setTimeout(() => resolve(), 200);
+                });
+            }
+            if (subs == undefined || subs.length == 0) return;
+
+            setViewport({
+                zoom: 14,
+                latitude: subs[0].coord.lat,
+                longitude: subs[0].coord.long
+            });
+            changeNewSubscription({ coord: {
+                lat: subs[0].coord.lat - 0.001,
+                long: subs[0].coord.long
+            } as any});
         });
     }, []);
 
