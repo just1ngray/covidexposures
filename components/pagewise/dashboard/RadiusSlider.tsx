@@ -16,7 +16,8 @@ export default function RadiusSlider({ radius, setRadius }: Props) {
                         border border-gray-400 rounded
                     " 
                     type="number" value={radius}
-                    onChange={(e) => setRadius(Number(e.target.value))} 
+                    onChange={(e) => setRadius(Math.min(Number(e.target.value), 4456))}
+                    max={4456} min={1}
                 />
                 m
             </span>
@@ -26,10 +27,17 @@ export default function RadiusSlider({ radius, setRadius }: Props) {
                     cursor-move appearance-none 
                     bg-yellow-400 rounded-full
                 " type="range"
-                min={0} max={120} step={1} 
+                min={0} max={66} step={1} 
                 onChange={(e) => setRadius(toM(Number(e.target.value)))}
                 value={toS(radius)}
             />
+
+            {radius > 1000 &&<p className="text-red-700 font-bold text-lg">
+                                WARNING: Setting a large radius could lead to <u>a lot</u> of notification emails.
+                            </p>}
+            {radius < 100 &&<p className="text-red-700">
+                                WARNING: A small radius might miss notification emails you should have received.
+                            </p>}
         </div>
     );
 }

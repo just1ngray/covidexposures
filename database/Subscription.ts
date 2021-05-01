@@ -42,8 +42,8 @@ export const SubscriptionSchema = new Schema({
     },
     radius: {
         type: Number,
-        min: 0,
-        max: 6400*1000, // radius of earth in m
+        min: 1,
+        max: 4456,
         required: true
     },
     start: {
