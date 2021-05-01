@@ -18,7 +18,8 @@ export default async function scrape(minsUntil: number, minsBetween: number) {
         const scrapers = await ScraperModel.find() as Scraper[];
         const browser = await puppeteer.launch({
             headless: true,
-            args: ["--no-sandbox"]
+            args: ["--no-sandbox"],
+            timeout: 1000*60 // 1 minute
         });
 
         for (const scraper of scrapers) {
