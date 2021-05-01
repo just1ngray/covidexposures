@@ -21,7 +21,13 @@ export interface Subscription extends Document {
     end: number,
 
     /** any assigned exposures found to match this subscription */
-    exposures: [Types.ObjectId & Exposure]
+    exposures: [Types.ObjectId & Exposure],
+
+    /** the bounds of the coord & radius */
+    bounds: {
+        sw: { long: number, lat: number },
+        ne: { long: number, lat: number }
+    }
 }
 
 export const SubscriptionSchema = new Schema({
@@ -52,6 +58,10 @@ export const SubscriptionSchema = new Schema({
             ref: "Exposure"
         }],
         default: []
+    },
+    bounds: {
+        sw: { long: Number, lat: Number },
+        ne: { long: Number, lat: Number }
     },
     createdAt: {
         type: Date,

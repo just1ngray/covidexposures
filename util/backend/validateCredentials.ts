@@ -24,7 +24,7 @@ import { Credentials } from "../frontend/credentials";
             const success = data as Success;
 
             if (!success.email_verified) throw new Error("Unverified email address");
-            return [success.name, success.email];
+            return [success.name, success.email.toLowerCase()];
         }
 
         default: {

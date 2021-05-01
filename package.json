@@ -2,9 +2,9 @@
   "name": "covidexposures",
   "version": "1.0.0",
   "description": "Automatically find COVID-19 exposures",
-  "main": "main.ts",
+  "main": "",
   "scripts": {
-    "backend": "ts-node main.ts",
+    "backend": "ts-node ./worker/main.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
