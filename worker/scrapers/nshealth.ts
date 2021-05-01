@@ -31,13 +31,18 @@ const nshealth: ScraperExports = {
     
         const exposures = tableRows
             .filter((row) => row.length == 7)
-            .filter((row) => /Route [0-9]+/.test(row[0]) == false) // no busses
+            .filter((row) => /Route [0-9]+/.test(row[0]) == false)  // no busses
             .map((row) => {
                 const { start, end } = parseTime(row[1]);
 
                 let addr = row[2];
-                if (row[0].includes("to Halifax") || row[0].includes("from Halifax"))
+                if (row[0].includes("to Halifax")                   // airport override
+                    || row[0].includes("from Halifax")
+                    || row[0].includes("Air Canada")
+                    || row[0].includes("West Jet")
+                ) {
                     addr = "747 Bell Boulevard in Goffs, Nova Scotia";
+                }
 
                 const found: ScrapedExposure = {
                     name: row[0],
