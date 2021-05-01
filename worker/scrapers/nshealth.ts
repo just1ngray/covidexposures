@@ -83,7 +83,7 @@ function parseTime(time: string): { start: number, end: number } {
     });
 
     return { 
-        start: a.toMillis(), 
-        end: b.toMillis()
+        start: a.toMillis() || Date.now(), 
+        end: b.toMillis() || a.toMillis()+1000*60*60*6 || Date.now()+1000*60*60*6
     };
 }
