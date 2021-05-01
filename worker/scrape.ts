@@ -2,7 +2,7 @@ import fs from "fs";
 import puppeteer from "puppeteer";
 
 import { ScraperModel, Scraper } from "../database/Scraper";
-import { Exposure, ExposureModel } from "../database/Exposure";
+import { ExposureModel } from "../database/Exposure";
 import { ScrapedExposure } from "./SCRAPER_TEMPLATE";
 import geocode from "./geocode";
 import updateSubscriptions from "./subscriptions";
@@ -16,7 +16,10 @@ export default async function scrape(minsUntil: number, minsBetween: number) {
 
     while (true) {
         const scrapers = await ScraperModel.find() as Scraper[];
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: ["--no-sandbox"]
+        });
 
         for (const scraper of scrapers) {
             try {
