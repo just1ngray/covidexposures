@@ -15,7 +15,7 @@ export default function Home() {
                 Not affiliated with or endorsed by any company or government organization.
             </p>
 
-            <p className="text-center text-lg">
+            <p className="text-center text-lg mb-3">
                 Protecting you with up-to-date notifications of your potential exposures.
             </p>
 
