@@ -76,7 +76,7 @@ function Feature({ src, height, width, children, text="RIGHT" }: FeatureProps) {
             <div className={
                 `md:p-4 md:flex md:items-center 
                 ${text == "LEFT" ? "order-0" : "order-2"}
-                text-lg
+                text-lg text-gray-700
             `}>
                 {children}
             </div>
