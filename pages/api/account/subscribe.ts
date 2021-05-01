@@ -1,10 +1,11 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import { NextApiRequest, NextApiResponse } from "next";
+import { getBoundsOfDistance } from "geolib";
 
 import * as db from "../../../database/db";
 import validateCredentials from "../../../util/backend/validateCredentials";
-import { Subscription, SubscriptionModel } from "../../../database/Subscription";
+import { SubscriptionModel } from "../../../database/Subscription";
 import { Account, AccountModel } from "../../../database/Account";
-import getExposuresWithin from "../../../util/backend/getExposuresWithin";
+import { ExposureModel, Exposure } from "../../../database/Exposure";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method != "POST") 
@@ -19,13 +20,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             account = new AccountModel({ email, name });
             await account.save();
         }
+        if (!account.isSubscribed) {
+            account.isSubscribed = true;
+            await account.save();
+        }
 
-        const exposures = await getExposuresWithin(
-            req.body.coord,
-            req.body.radius,
-            req.body.start,
-            req.body.end
-        );
+        const [sw, ne] = getBoundsOfDistance({
+            latitude: req.body.coord.lat,
+            longitude: req.body.coord.long
+        }, req.body.radius) as { longitude: number, latitude: number }[];
+
+        const exposures = await ExposureModel.find({
+            "coord.lat": { $gte: sw.latitude, $lte: ne.latitude },
+            "coord.long": { $gte: sw.longitude, $lte: ne.longitude },
+            "start": { $gte: req.body.start },
+            "end": { $lte: req.body.end }
+        }).lean() as Exposure[];
 
         const sub = new SubscriptionModel({
             account: account._id,
@@ -33,8 +43,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             radius: req.body.radius,
             start: req.body.start,
             end: req.body.end,
-            exposures: exposures.map((e) => e._id)
-        } as Subscription);
+            exposures: exposures.map((e) => e._id),
+            bounds: {
+                ne: { long: ne.longitude, lat: ne.latitude },
+                sw: { long: sw.longitude, lat: sw.latitude }
+            }
+        });
 
         await sub.save();
         res.send({ ...sub._doc, exposures }); // send the filled exposure doc(s)
