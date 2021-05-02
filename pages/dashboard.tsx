@@ -119,12 +119,16 @@ export default function Dashboard({ apiKey }) {
                         <Result result={result} />
                     </div>
 
+                    {newSub.start >= newSub.end && 
+                        <p className="text-red-700">The ending date is before the starting date!</p>
+                    }
+
                     <span>
                         <PopButton type="submit" 
-                            disabled={result == "SENDING"}
+                            disabled={result == "SENDING" || newSub.start >= newSub.end}
                             className="
                                 p-4 bg-green-400 text-gray-50 font-bold rounded-full
-                                hover:bg-green-500
+                                hover:bg-green-500 disabled:cursor-not-allowed disabled:opacity-50
                         ">
                             Create Subscription
                         </PopButton>
