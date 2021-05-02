@@ -30,54 +30,53 @@ interface Props {
 interface Viewport {
     latitude: number,
     longitude: number,
-    zoom: number
+    zoom: number,
+    status: "INITIALIZING" | "LOCATED" | "MOVED"
 }
 
 export default function Map({ apiKey, subs, newSubscription, changeNewSubscription, unsubscribe }: Props) {
     const [viewport, setViewport] = useState<Viewport>({
         latitude: 44.651070,
         longitude: -63.582687,
-        zoom: 11
+        zoom: 11,
+        status: "INITIALIZING"
     });
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(({ coords }) => {
             setViewport({
                 zoom: 14,
                 latitude: coords.latitude,
-                longitude: coords.longitude
+                longitude: coords.longitude,
+                status: "LOCATED"
             });
             changeNewSubscription({ coord: {
                 lat: coords.latitude,
                 long: coords.longitude
             } as any});
-        }, async () => {
-            // could not geocode... set to a previously found subscription location
-            const start = Date.now();
-            while (subs == undefined && start + 2000 < Date.now()) {
-                await new Promise<void>((resolve) => {
-                    setTimeout(() => resolve(), 200);
-                });
-            }
-            if (subs == undefined || subs.length == 0) return;
+        })
+    }, []);
+    useEffect(() => {
+        if (viewport.status == "INITIALIZING" && subs) {
+            if (subs.length == 0) return setViewport((vp) => ({ ...vp, status: "LOCATED" }));
 
             setViewport({
                 zoom: 14,
                 latitude: subs[0].coord.lat,
-                longitude: subs[0].coord.long
+                longitude: subs[0].coord.long,
+                status: "LOCATED"
             });
             changeNewSubscription({ coord: {
                 lat: subs[0].coord.lat - 0.001,
                 long: subs[0].coord.long
             } as any});
-        });
-    }, []);
+        }
+    }, [subs]);
 
     const [isDraggingMarker, setIsDraggingMarker] = useState<boolean>(false);
 
     const [radiusIndicatorFeature, setRadiusIndicatorFeature] = useState(null);
     useEffect(() => {
         if (isDraggingMarker) return;
-
         setRadiusIndicatorFeature({
             type: "Feature",
             geometry: {
@@ -87,10 +86,6 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
             properties: { radius: newSubscription.radius }
         });
     }, [newSubscription.coord, isDraggingMarker]);
-
-    function moveMarker(e: MapEvent) {
-        changeNewSubscription({ coord: { long: e.lngLat[0], lat: e.lngLat[1] }} as any);
-    }
 
     // zoom map to fit currently selected radius of the newSub
     const mapRef = useRef(null);
@@ -107,7 +102,7 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
                 [sw.longitude, sw.latitude],
                 [ne.longitude, ne.latitude]
             ], { padding: -125 });
-        setViewport({ longitude, latitude, zoom });
+        setViewport((vp) => ({ longitude, latitude, zoom, status: vp.status }));
     }, [newSubscription.radius]);
 
     const [popupSubscriptionDetails, setPopupSubscriptionDetails] = useState<Subscription>(null);
@@ -122,11 +117,12 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
             onViewportChange={(vp) => setViewport({
                 longitude: vp.longitude, 
                 latitude: vp.latitude, 
-                zoom: vp.zoom 
+                zoom: vp.zoom,
+                status: vp.status ?? "INITIALIZING"
             })}
             onClick={() => setPopupSubscriptionDetails(null)}
             doubleClickZoom={false}
-            onDblClick={moveMarker}
+            onDblClick={(e) => changeNewSubscription({ coord: { long: e.lngLat[0], lat: e.lngLat[1] }} as any)}
             ref={mapRef}
         >
             {/* standard controls */}
