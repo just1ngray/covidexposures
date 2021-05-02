@@ -31,7 +31,7 @@ interface Viewport {
     latitude: number,
     longitude: number,
     zoom: number,
-    status: "INITIALIZING" | "LOCATED" | "MOVED"
+    status: "INITIALIZING" | "LOCATED"
 }
 
 export default function Map({ apiKey, subs, newSubscription, changeNewSubscription, unsubscribe }: Props) {
@@ -114,12 +114,12 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
             width="100%" height="100%"
             mapStyle="mapbox://styles/mapbox/streets-v11"
             {...viewport}
-            onViewportChange={(vp) => setViewport({
-                longitude: vp.longitude, 
-                latitude: vp.latitude, 
-                zoom: vp.zoom,
-                status: vp.status ?? "INITIALIZING"
-            })}
+            onViewportChange={(newVP) => setViewport((currentVP) => ({
+                longitude: newVP.longitude, 
+                latitude: newVP.latitude, 
+                zoom: newVP.zoom,
+                status: currentVP.status
+            }))}
             onClick={() => setPopupSubscriptionDetails(null)}
             doubleClickZoom={false}
             onDblClick={(e) => changeNewSubscription({ coord: { long: e.lngLat[0], lat: e.lngLat[1] }} as any)}
