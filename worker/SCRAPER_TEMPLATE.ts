@@ -3,16 +3,9 @@ import { Page } from "puppeteer";
 import { Exposure } from "../database/Exposure";
 import { Scraper, ScrapingConfig } from "../database/Scraper";
 
-export interface ScrapedExposure {
-    name: string,
-    address: string,
-    instructions: string,
-    start: number,
-    end: number,
-
-    scraper?: Scraper,
-    coord?: { long: number, lat: number }
-}
+export type ScrapedExposure = Pick<Exposure, 
+    "name" | "address" | "instructions" | "start" | "end"
+> & { scraper?: Scraper, coord?: { long: number, lat: number } };
 
 export interface ScraperExports {
     /** the initialization configuration for the scraper */
