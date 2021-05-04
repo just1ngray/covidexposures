@@ -16,7 +16,7 @@ import {
 import getBoundsOfDistance from "geolib/es/getBoundsOfDistance";
 
 import { Subscription } from "../../../database/Subscription";
-import mToPx from "../../../util/frontend/mToPx";
+import mToPx from "../../../util/mToPx";
 import SubscriptionInfo from "./SubscriptionInfo";
 
 interface Props {

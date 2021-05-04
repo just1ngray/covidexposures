@@ -25,5 +25,5 @@ import scraping from "./scrape";
         process.exit(0);
     });
 
-    scraping(5, 10);
+    scraping(0, 10);
 })();

@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { Subscription } from "../../../database/Subscription";
 import ExposureJSX from "../../Exposure";
-import mToPx from "../../../util/frontend/mToPx";
+import mToPx from "../../../util/mToPx";
 import { Exposure } from "../../../database/Exposure";
 
 interface Props {

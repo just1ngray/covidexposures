@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import Container from "../components/Container";
-import { useLogin, logout } from "../util/frontend/credentials";
+import { useLogin, logout } from "../util/credentials";
 import { Subscription } from "../database/Subscription";
 import keys from "../../keys";
 import Map from "../components/pagewise/dashboard/Map";

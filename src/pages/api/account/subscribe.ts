@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getBoundsOfDistance } from "geolib";
 
 import * as db from "../../../database/db";
-import validateCredentials from "../../../util/backend/validateCredentials";
+import validateCredentials from "../../../backend/validateCredentials";
 import { SubscriptionModel } from "../../../database/Subscription";
 import { Account, AccountModel } from "../../../database/Account";
 import { ExposureModel, Exposure } from "../../../database/Exposure";

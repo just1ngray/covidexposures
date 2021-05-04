@@ -4,10 +4,13 @@
   "description": "Automatically find COVID-19 exposures",
   "main": "",
   "scripts": {
-    "backend": "ts-node ./worker/main.ts",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "bdev": "ts-node ./src/backend/main.ts",
+    "bbuild": "tsc -p ./src/backend/tsconfig.json",
+    "bstart": "node ./build/src/backend/main.js",
+
+    "fdev": "next dev",
+    "fbuild": "next build",
+    "fstart": "next start"
   },
   "author": "Justin Gray",
   "license": "MIT",

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
-import { useLogin } from "../util/frontend/credentials";
+import { useLogin } from "../util/credentials";
 
 export default function Navbar() {
     const creds = useLogin();

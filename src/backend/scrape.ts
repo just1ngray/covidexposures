@@ -26,7 +26,7 @@ export default async function scrape(minsUntil: number, minsBetween: number) {
             try {
                 let numAdded = 0;
                 console.log(`Scraping ${scraper.URL}...`);
-                const { validate, scrape } = require(`./scrapers/${scraper.name}`);
+                const { validate, scrape } = require(`${__dirname}/scrapers/${scraper.name}`);
 
                 const exposures = await getScrapedExposures(scraper, scrape, browser);
                 for (const e of exposures) {
@@ -85,17 +85,17 @@ async function getScrapedExposures(
 
 function initScrapers(): Promise<void> {
     return new Promise((resolve, reject) => {
-        fs.readdir("./worker/scrapers", async (err, scraperFiles: string[]) => {
+        fs.readdir(`${__dirname}/scrapers`, async (err, scraperFiles: string[]) => {
             if (err) return reject(err);
 
             const saves: Promise<any>[] = [];
 
             for (const scraperFile of scraperFiles) {
-                const { URL, country, language, center, tags } = require(`./scrapers/${scraperFile}`).config;
+                const { URL, country, language, center, tags } = require(`${__dirname}/scrapers/${scraperFile}`).config;
 
                 const scraper = new ScraperModel({ 
                     URL, country, language, center, tags,
-                    name: scraperFile
+                    name: scraperFile.replace(/(.ts|.js)$/, "")
                 }) as Scraper;
                 const exists = await ScraperModel.exists({ name: scraper.name });
                 if (!exists) saves.push(scraper.save());

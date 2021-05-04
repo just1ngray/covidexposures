@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
 import * as db from "../../../database/db";
-import validateCredentials from "../../../util/backend/validateCredentials";
+import validateCredentials from "../../../backend/validateCredentials";
 import { Subscription, SubscriptionModel } from "../../../database/Subscription";
 import { Account, AccountModel } from "../../../database/Account";
 

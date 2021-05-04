@@ -4,7 +4,7 @@ import { GoogleLogin, GoogleLoginResponse } from "react-google-login";
 
 import Container from "../components/Container";
 import keys from "../../keys";
-import { useLogin, login } from "../util/frontend/credentials";
+import { useLogin, login } from "../util/credentials";
 
 export default function Login({ clientId }) {
     const router = useRouter();

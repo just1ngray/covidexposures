@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { useLogin, logout } from "../util/frontend/credentials";
+import { useLogin, logout } from "../util/credentials";
 import { useEffect } from "react";
 
 export default function Container({ className = "", children, authRequired = false }) {

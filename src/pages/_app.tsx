@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 
 import "tailwindcss/tailwind.css";
-import "../util/frontend/global.css";
+import "../util/global.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     return (

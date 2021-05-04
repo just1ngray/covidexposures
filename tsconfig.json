@@ -11,15 +11,14 @@
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
-    // "noEmit": true, default generated option, but I want to build files
+    
     // "module": "esnext", default next option, switched to commonjs
     "module": "CommonJS",
+    
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "outDir": "build",
-    "removeComments": true,
     "noEmit": true
   },
   "include": [
@@ -28,6 +27,7 @@
     "src/**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/backend/**/*.ts"
   ]
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { Credentials } from "../frontend/credentials";
+import { Credentials } from "../util/credentials";
 
 /**
  * Validates the token with the provider
