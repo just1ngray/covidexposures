@@ -1,7 +1,8 @@
-import fs from "fs";
+import { existsSync, writeFileSync } from "fs";
+import { execSync } from "child_process";
 
 // set up key file
-if (!fs.existsSync("./keys.ts")) fs.writeFileSync("./keys.ts",
+if (!existsSync("./keys.ts")) writeFileSync("./keys.ts",
 `export default {
     mapbox: "MAPBOX_ACCESS_TOKEN",
     mailjet: {
@@ -13,17 +14,28 @@ if (!fs.existsSync("./keys.ts")) fs.writeFileSync("./keys.ts",
     }
 };`);
 
-import * as database from "../database/db";
-import scraping from "./scrape";
+const MINS_UNTIL = 0;
+const MINS_BETWEEN = 1;
 
 // connect to the database and start tasks
 (async () => {
-    await database.connect(false);
+    console.log(`Starting backend coordinator in ${MINS_UNTIL} minutes...\n`);
 
-    process.on("SIGINT", async () => {
-        await database.disconnect();
-        process.exit(0);
+    await new Promise<void>((resolve) => {
+        setTimeout(() => resolve(), 1000*60*MINS_UNTIL);
     });
 
-    scraping(0, 10);
+    let scrape = () => execSync(`node build/src/backend/scrape.js`, { stdio: "inherit" });
+    if (__dirname.includes("covidexposures/src")) // running in uncompiled dev mode
+        scrape = () => execSync(`ts-node src/backend/scrape.ts`, { stdio: "inherit" });
+
+    while (true) {
+        scrape();
+        console.log(`\nWaiting ${MINS_BETWEEN} minutes before running again...\n`);
+
+        await new Promise<void>((resolve) => {
+            setTimeout(() => resolve(), 1000*60*MINS_BETWEEN);
+        });
+    }
+
 })();

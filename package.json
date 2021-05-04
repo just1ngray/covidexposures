@@ -8,6 +8,8 @@
     "bbuild": "tsc -p ./src/backend/tsconfig.json",
     "bstart": "node ./build/src/backend/main.js",
 
+    "ball": "npm run bbuild && npm run fbuild",
+
     "fdev": "next dev",
     "fbuild": "next build",
     "fstart": "next start"

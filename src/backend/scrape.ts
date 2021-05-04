@@ -1,65 +1,61 @@
 import fs from "fs";
 import puppeteer from "puppeteer";
 
+import * as db from "../database/db";
 import { ScraperModel, Scraper } from "../database/Scraper";
 import { ExposureModel } from "../database/Exposure";
 import { ScrapedExposure } from "./SCRAPER_TEMPLATE";
 import geocode from "./geocode";
 import updateSubscriptions from "./subscriptions";
 
-export default async function scrape(minsUntil: number, minsBetween: number) {
-    await new Promise<void>((resolve) => {
-        setTimeout(() => resolve(), 1000*60*minsUntil);
+(async () => {
+    await db.connect(false);
+    await initScrapers();
+    await scrape();
+    await db.disconnect();
+})();
+
+async function scrape() {
+    const scrapers = await ScraperModel.find() as Scraper[];
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: ["--no-sandbox"],
+        timeout: 1000*60 // 1 minute
     });
 
-    await initScrapers();
+    for (const scraper of scrapers) {
+        try {
+            let numAdded = 0;
+            console.log(`Scraping ${scraper.URL}...`);
+            const { validate, scrape } = require(`${__dirname}/scrapers/${scraper.name}`);
 
-    while (true) {
-        const scrapers = await ScraperModel.find() as Scraper[];
-        const browser = await puppeteer.launch({
-            headless: true,
-            args: ["--no-sandbox"],
-            timeout: 1000*60 // 1 minute
-        });
+            const exposures = await getScrapedExposures(scraper, scrape, browser);
+            for (const e of exposures) {
+                if (await ExposureModel.exists({
+                    scraper: e.scraper,
+                    address: e.address, 
+                    start: e.start, 
+                    end: e.end 
+                })) continue;
 
-        for (const scraper of scrapers) {
-            try {
-                let numAdded = 0;
-                console.log(`Scraping ${scraper.URL}...`);
-                const { validate, scrape } = require(`${__dirname}/scrapers/${scraper.name}`);
+                try {
+                    e.coord = await geocode(e, scraper);
+                    const doc = new ExposureModel(e);
+                    if (!validate(doc)) continue;
 
-                const exposures = await getScrapedExposures(scraper, scrape, browser);
-                for (const e of exposures) {
-                    if (await ExposureModel.exists({
-                        scraper: e.scraper,
-                        address: e.address, 
-                        start: e.start, 
-                        end: e.end 
-                    })) continue;
-
-                    try {
-                        e.coord = await geocode(e, scraper);
-                        const doc = new ExposureModel(e);
-                        if (!validate(doc)) continue;
-
-                        await doc.save();
-                        await updateSubscriptions(doc);
-                        numAdded ++;
-                    } catch {}
-                }
-                
-                console.log(`Added ${numAdded} exposures via ${scraper.name}`);
-            } catch (err) {
-                console.error(scraper, err)
+                    await doc.save();
+                    await updateSubscriptions(doc);
+                    numAdded ++;
+                } catch {}
             }
+            
+            console.log(`Added ${numAdded} exposures via ${scraper.name}`);
+        } catch (err) {
+            console.error(scraper, err)
         }
-
-        await browser.close();
-
-        await new Promise<void>((resolve) => {
-            setTimeout(() => resolve(), 1000*60*minsBetween);
-        });
     }
+
+    await browser.close();
 }
 
 async function getScrapedExposures(
