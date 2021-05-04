@@ -88,13 +88,13 @@ function initScrapers(): Promise<void> {
 
             for (const scraperFile of scraperFiles) {
                 const { URL, country, language, center, tags } = require(`${__dirname}/scrapers/${scraperFile}`).config;
+                const name = scraperFile.replace(/(.ts|.js)$/, "");
 
-                const scraper = new ScraperModel({ 
-                    URL, country, language, center, tags,
-                    name: scraperFile.replace(/(.ts|.js)$/, "")
-                }) as Scraper;
-                const exists = await ScraperModel.exists({ name: scraper.name });
-                if (!exists) saves.push(scraper.save());
+                const exists = await ScraperModel.exists({ name });
+                if (!exists) {
+                    const scraper = new ScraperModel({ URL, country, language, center, tags, name }) as Scraper;
+                    saves.push(scraper.save());
+                }
             }
 
             Promise.all(saves).then(() => resolve());
