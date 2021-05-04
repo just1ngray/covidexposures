@@ -18,7 +18,7 @@ import Head from "next/head";
 import Container from "../components/Container";
 import { Coordinate } from '../database/Coordinate';
 import { Exposure } from '../database/Exposure';
-import keys from "../keys";
+import keys from "../../keys";
 import MoreInfo from "../components/pagewise/heatmap/MoreInfo";
 
 interface ViewPort {

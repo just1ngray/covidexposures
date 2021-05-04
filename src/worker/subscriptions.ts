@@ -3,7 +3,7 @@ import axios from "axios";
 import { AccountModel } from "../database/Account";
 import { Exposure } from "../database/Exposure";
 import { SubscriptionModel } from "../database/Subscription";
-import keys from "../keys";
+import keys from "../../keys";
 
 export default async function updateSubscriptions(e: Exposure) {
     const subscriptions = await SubscriptionModel.find({

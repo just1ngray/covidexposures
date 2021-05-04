@@ -1,7 +1,7 @@
 import mbxGeocode from "@mapbox/mapbox-sdk/services/geocoding";
 import { LeanDocument } from "mongoose";
 
-import keys from "../keys";
+import keys from "../../keys";
 import { ExposureModel, Exposure } from "../database/Exposure";
 import { Scraper } from "../database/Scraper";
 import { ScrapedExposure } from "./SCRAPER_TEMPLATE";
