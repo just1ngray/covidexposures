@@ -84,20 +84,17 @@ function initScrapers(): Promise<void> {
         fs.readdir(`${__dirname}/scrapers`, async (err, scraperFiles: string[]) => {
             if (err) return reject(err);
 
-            const saves: Promise<any>[] = [];
-
             for (const scraperFile of scraperFiles) {
-                const { URL, country, language, center, tags } = require(`${__dirname}/scrapers/${scraperFile}`).config;
+                const { URL, country, language, center, tags, isActive } 
+                    = require(`${__dirname}/scrapers/${scraperFile}`).config;
+
                 const name = scraperFile.replace(/(.ts|.js)$/, "");
+                await ScraperModel.findOneAndUpdate({ name }, {
+                    URL, country, language, center, tags, isActive
+                }, { upsert: true });
 
-                const exists = await ScraperModel.exists({ name });
-                if (!exists) {
-                    const scraper = new ScraperModel({ URL, country, language, center, tags, name }) as Scraper;
-                    saves.push(scraper.save());
-                }
+                resolve();
             }
-
-            Promise.all(saves).then(() => resolve());
         });
     });
 }

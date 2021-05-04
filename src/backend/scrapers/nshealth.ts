@@ -8,14 +8,15 @@ import { ScraperExports, ScrapedExposure } from "../SCRAPER_TEMPLATE";
 
 const nshealth: ScraperExports = {
     config: {
-        URL: "http://www.nshealth.ca/covid-exposures",
+        URL: "https://www.nshealth.ca/covid-exposures",
         country: "CA",
         language: "en",
         center: {
             long: -63.582687,
             lat: 44.651070
         },
-        tags: [ScraperTags.NO_BUSSES]
+        tags: [ScraperTags.NO_BUSSES],
+        isActive: true
     },
 
     scrape: async function scrape(page: puppeteer.Page): Promise<ScrapedExposure[]> {

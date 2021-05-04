@@ -5,7 +5,8 @@ export async function connect(silent = true) {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
-        poolSize: 5
+        poolSize: 5,
+        useFindAndModify: false
     })
         .then(() => {
             if (!silent) console.log("Connected to MongoDB");

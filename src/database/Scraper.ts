@@ -1,7 +1,5 @@
 import { Schema, Document, model, models } from "mongoose";
-import puppeteer from "puppeteer";
 
-import { ExposureModel, Exposure } from "./Exposure";
 import { CoordinateSchema } from "./Coordinate";
 
 
@@ -23,7 +21,10 @@ export interface ScrapingConfig {
     },
 
     /** tags associated with how the scraper works */
-    tags: ScraperTags[]
+    tags: ScraperTags[],
+
+    /** if the scraper is currently active */
+    isActive: boolean
 }
 
 /** standardized scraping tags */
