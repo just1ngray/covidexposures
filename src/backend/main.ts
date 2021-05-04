@@ -14,8 +14,8 @@ if (!existsSync("./keys.ts")) writeFileSync("./keys.ts",
     }
 };`);
 
-const MINS_UNTIL = 0;
-const MINS_BETWEEN = 1;
+const MINS_UNTIL = 5;
+const MINS_BETWEEN = 15;
 
 // connect to the database and start tasks
 (async () => {
