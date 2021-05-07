@@ -32,7 +32,7 @@ const nshealth: ScraperExports = {
     
         const exposures = tableRows
             .filter((row) => row.length == 7)
-            .filter((row) => /Route [0-9]+/.test(row[0]) == false)  // no busses
+            .filter((row) => /Route [0-9]+/i.test(row[0]) == false)  // no busses
             .map((row) => {
                 const { start, end } = parseTime(row[1]);
 
