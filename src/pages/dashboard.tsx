@@ -83,7 +83,7 @@ export default function Dashboard({ apiKey }) {
                     <span className="w-full md:w-auto inline-block text-center">
                         <DatePicker onCalendarClose={() => {
                             setNewSub((oldSub: any) => {
-                                return { ...oldSub, end: oldSub.start + 1000*60*60*12 };
+                                return { ...oldSub, end: oldSub.start + 1000*60*60*3 };
                             });
                             endDatePicker.current.setOpen(true);
                         }}
