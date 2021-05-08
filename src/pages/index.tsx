@@ -18,7 +18,7 @@ export default function Home() {
                 Protecting you with up-to-date notifications of your potential exposures.
             </p>
 
-            <Feature src="/subscriptions.png" height={624/2} width={1504/2} href="/login">
+            <Feature src="/assets/subscriptions.png" height={624/2} width={1504/2} href="/login">
                 <p className="md:max-w-sm">
                     Sign in to add your locations. You'll automatically receive email notifications
                     if a potential exposure is detected within your subscription region.
@@ -27,7 +27,7 @@ export default function Home() {
 
             <Contribute message="100% open source - add your local health authority!" />
 
-            <Feature src="/heatmap-high.png" height={1574/4} width={1996/4} text="LEFT" href="/heatmap">
+            <Feature src="/assets/heatmap-high.png" height={1574/4} width={1996/4} text="LEFT" href="/heatmap">
                 <p>
                     Or explore exposures by their geographic region with our Hot Spots feature.
                 </p>

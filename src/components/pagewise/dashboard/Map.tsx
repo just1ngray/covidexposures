@@ -141,7 +141,7 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
                     latitude={s.coord.lat}
                 >
                     <Image draggable={false} 
-                        src={s.exposures.length > 0 ? "/mapbox-marker-icon-red.svg" : "/mapbox-marker-icon-gray.svg"}
+                        src={s.exposures.length > 0 ? "/icons/mapbox-marker-icon-red.svg" : "/icons/mapbox-marker-icon-gray.svg"}
                         width={50} height={50}
                         className="cursor-pointer"
                         onClick={() => {
@@ -171,7 +171,7 @@ export default function Map({ apiKey, subs, newSubscription, changeNewSubscripti
                 onDragEnd={() => setIsDraggingMarker(false)}
             >
                 <Image draggable={false} 
-                    src="/mapbox-marker-icon-blue.svg" 
+                    src="/icons/mapbox-marker-icon-blue.svg" 
                     width={50} height={50}
                     className="cursor-move"
                     alt="New subscription"

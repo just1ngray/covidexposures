@@ -8,7 +8,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     return (
         <>
             <Head>
-                <link rel="shortcut icon" href="/logo.png" />
+                <link rel="shortcut icon" href="/favicon.png" />
                 <title>COVID Exposures</title>
                 <meta name="description" content="Data driven COVID Exposures and Notifications"></meta>
                 <meta name="keywords" content="COVID, Coronavirus, Exposures, COVID Exposures"></meta>

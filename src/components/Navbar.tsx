@@ -31,13 +31,13 @@ export default function Navbar() {
         ">
             {/* logo */}
             <div className="hidden md:inline-block">
-                <Image src="/covid.svg" height={50} width={50} alt="COVID Icon" />
+                <Image src="/icons/covid.svg" height={50} width={50} alt="COVID Icon" />
             </div>
 
             {/* hamburger */}
             <div className="inline-block md:hidden" onClick={toggle}>
                 <button className="focus:outline-none">
-                    <Image src={isOpen ? "/cross.svg" : "/hamburger.svg"} 
+                    <Image src={isOpen ? "/icons/cross.svg" : "/icons/hamburger.svg"} 
                         height={70} width={70} 
                         alt="COVID Icon or Menu Icon"
                     />

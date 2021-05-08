@@ -6,7 +6,7 @@ import ExposureJSX from "../../Exposure";
 export default function Result({ result }) {
     if (result == null || result == "SENDING") return (
         <div className={`${result == null ? "hidden" : "animate-spin"}`}>
-            <Image priority src="/spinner.svg" height={100} width={100} alt="Loading..." />
+            <Image priority src="/icons/spinner.svg" height={100} width={100} alt="Loading..." />
         </div>
     );
 
