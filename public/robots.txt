@@ -1,9 +1,3 @@
-User-agent: *
-Allow: /
-Disallow: /*.png$
-Disallow: /*.svg$
-Disallow: /heatmap
+User-Agent: * 
+Allow: / 
 Disallow: /dashboard
-
-User-agent: Googlebot-Image
-Disallow: /
