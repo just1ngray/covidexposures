@@ -70,4 +70,6 @@ export const ExposureSchema = new Schema({
     }
 });
 
+ExposureSchema.index({ coord: "2dsphere" });
+
 export const ExposureModel = models.Exposure || model("Exposure", ExposureSchema);
