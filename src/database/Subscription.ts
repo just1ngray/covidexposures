@@ -76,4 +76,6 @@ export const SubscriptionSchema = new Schema({
     }
 });
 
+SubscriptionSchema.index({ coord: "2dsphere" });
+
 export const SubscriptionModel = models.Subscription || model("Subscription", SubscriptionSchema);
