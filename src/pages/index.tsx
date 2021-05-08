@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import Container from '../components/Container';
@@ -67,13 +66,13 @@ function Feature({ src, height, width, children, text="RIGHT", href }: FeaturePr
             <PopButton className="shadow-lg p-4 my-4
                 md:flex md:items-center md:justify-evenly
             ">
-                <div className="order-1 md:w-3/4">
-                    <Image src={src} 
-                        quality={5} priority
-                        height={height} width={width}
-                        alt="Feature screenshot"
-                    />
-                </div>
+                <img
+                    className="order-1 md:w-3/4"
+                    src={src}
+                    height={height}
+                    width={width}
+                    alt="Feature screenshot"
+                />
 
                 <div className={
                     `md:p-4 md:w-1/4
