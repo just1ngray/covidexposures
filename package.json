@@ -7,9 +7,7 @@
     "bdev": "ts-node ./src/backend/main.ts",
     "bbuild": "tsc -p ./src/backend/tsconfig.json",
     "bstart": "node ./build/src/backend/main.js",
-
     "ball": "npm run bbuild && npm run fbuild",
-
     "fdev": "next dev",
     "fbuild": "next build",
     "fstart": "next start"
@@ -17,7 +15,6 @@
   "author": "Justin Gray",
   "license": "MIT",
   "dependencies": {
-    "@mapbox/mapbox-sdk": "^0.12.1",
     "axios": "^0.21.1",
     "country-to-emoji-flag": "^1.0.0",
     "geolib": "^3.3.1",
