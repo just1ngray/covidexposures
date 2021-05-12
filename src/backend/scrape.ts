@@ -31,22 +31,33 @@ async function scrape() {
 
             const exposures = await getScrapedExposures(scraper, scrape, browser);
             for (const e of exposures) {
+                const exposureOutputLog = `${e.name} - ${e.address} @ ${e.start}`;
                 if (await ExposureModel.exists({
                     scraper: e.scraper,
                     address: e.address, 
                     start: e.start, 
                     end: e.end 
-                })) continue;
+                })) {
+                    console.log("PRE-EXISTS:", exposureOutputLog);
+                    continue;
+                }
 
                 try {
                     e.coord = await geocode(e, scraper);
                     const doc = new ExposureModel(e);
-                    if (!validate(doc)) continue;
+                    if (!validate(doc)) {
+                        console.log("INVALID DOC:", exposureOutputLog);
+                        continue;
+                    }
 
                     await doc.save();
                     await updateSubscriptions(doc);
                     numAdded ++;
-                } catch {}
+                    console.log("Added:", exposureOutputLog);
+                } catch (err) {
+                    console.log("ERROR:", exposureOutputLog);
+                    console.error(err);
+                }
             }
             
             console.log(`Added ${numAdded} exposures via ${scraper.name}`);
