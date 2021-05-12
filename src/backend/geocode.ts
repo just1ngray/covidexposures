@@ -19,7 +19,7 @@ export default async function geocode(
     const { data } = await axios.get(
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(exposure.address)}.json`, {
         params: {
-            access_token: keys.mapbox,
+            access_token: keys.mapbox.geocode,
             countries: scraper.country,
             limit: 1,
             language: scraper.language,

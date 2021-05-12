@@ -171,7 +171,7 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
 export async function getStaticProps() {
     return {
         props: {
-            apiKey: keys.mapbox
+            apiKey: keys.mapbox.map
         },
         revalidate: 60*60*6 // 6 hours
     }

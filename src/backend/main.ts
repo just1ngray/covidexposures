@@ -4,7 +4,10 @@ import { execSync } from "child_process";
 // set up key file
 if (!existsSync("./keys.ts")) writeFileSync("./keys.ts",
 `export default {
-    mapbox: "MAPBOX_ACCESS_TOKEN",
+    mapbox: {
+        map: "URL_RESTRICTED_PUBLIC_FACING_ACCESS_TOKEN",
+        geocode: "NON_SHARED_ACCESS_TOKEN_4_GEOCODING"
+    },
     mailjet: {
         key: "MAILJET_MAIN_ACCOUNT_API_KEY",
         secret: "MAILJET_MAIN_ACCOUNT_SECRET_KEY"
