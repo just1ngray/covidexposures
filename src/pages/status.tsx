@@ -8,16 +8,12 @@ import * as db from "../database/db";
 import Contribute from "../components/pagewise/status/Contribute";
 
 interface Props {
-    scrapers: [Scraper & { count: number}],
-    updated: number
+    scrapers: [Scraper & { count: number}]
 }
 
-export default function Status({ scrapers, updated }: Props) {
+export default function Status({ scrapers }: Props) {
     return (
         <Container>
-            <p className="mb-4 underline p-2">
-                Last Updated: {new Date(updated).toLocaleTimeString()}
-            </p>
             <div className="
                 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3
                 gap-4
@@ -32,7 +28,7 @@ export default function Status({ scrapers, updated }: Props) {
     );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
     await db.connect();
     const scrapers = await ScraperModel.find() as Scraper[];
     
@@ -61,9 +57,7 @@ export async function getStaticProps() {
                     count: (s as any).count,
                     tags: s.tags
                 }
-            }),
-            updated: Date.now()
-        },
-        revalidate: 5*60 // 5 minutes
+            })
+        }
     }
 }
