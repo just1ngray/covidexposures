@@ -33,8 +33,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const exposures = await ExposureModel.find({
             "coord.lat": { $gte: sw.latitude, $lte: ne.latitude },
             "coord.long": { $gte: sw.longitude, $lte: ne.longitude },
-            "start": { $gte: req.body.start },
-            "end": { $lte: req.body.end }
+            "start": { $lte: req.body.end },
+            "end": { $gte: req.body.start }
         }).lean() as Exposure[];
 
         const sub = new SubscriptionModel({
