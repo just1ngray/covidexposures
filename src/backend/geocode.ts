@@ -4,7 +4,7 @@ import axios from "axios";
 import keys from "../../keys";
 import { ExposureModel, Exposure } from "../database/Exposure";
 import { Scraper } from "../database/Scraper";
-import { ScrapedExposure } from "./SCRAPER_TEMPLATE";
+import { ScrapedExposure } from "./scraperTemplate";
 
 export default async function geocode(
     exposure: ScrapedExposure, 
