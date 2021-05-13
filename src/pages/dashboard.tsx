@@ -28,7 +28,7 @@ export default function Dashboard({ apiKey }) {
 
     const [newSub, setNewSub] = useState<Subscription>({
         start: Date.now(),
-        end: Date.now() + 1000*60*60*6,
+        end: Date.now() + 1000*60*60*3,
         coord: { long: -63.582687, lat: 44.651070 },
         radius: 300
     } as any);
