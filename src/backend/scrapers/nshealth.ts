@@ -4,7 +4,7 @@ import { getDistance } from "geolib";
 
 import { Exposure } from "../../database/Exposure";
 import { ScraperTags } from "../../database/Scraper";
-import { ScraperExports, ScrapedExposure } from "../SCRAPER_TEMPLATE";
+import { ScraperExports, ScrapedExposure } from "../scraperTemplate";
 
 const nshealth: ScraperExports = {
     config: {
