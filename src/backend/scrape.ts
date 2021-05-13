@@ -16,7 +16,7 @@ import updateSubscriptions from "./subscriptions";
 })();
 
 async function scrape() {
-    const scrapers = await ScraperModel.find() as Scraper[];
+    const scrapers = await ScraperModel.find({ isActive: true }) as Scraper[];
     const browser = await puppeteer.launch({
         headless: true,
         args: ["--no-sandbox"],
