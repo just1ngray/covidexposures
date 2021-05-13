@@ -4,9 +4,9 @@ import puppeteer from "puppeteer";
 import * as db from "../database/db";
 import { ScraperModel, Scraper } from "../database/Scraper";
 import { ExposureModel } from "../database/Exposure";
-import { ScrapedExposure } from "./SCRAPER_TEMPLATE";
+import { ScrapedExposure } from "./scraperTemplate";
 import geocode from "./geocode";
-import updateSubscriptions from "./subscriptions";
+import ProcessSubscriptions from "./processSubscriptions";
 
 (async () => {
     await db.connect(false);
@@ -23,6 +23,7 @@ async function scrape() {
         timeout: 1000*60 // 1 minute
     });
 
+    const subscriptionEmails = new ProcessSubscriptions();
     for (const scraper of scrapers) {
         try {
             let numAdded = 0;
@@ -51,7 +52,7 @@ async function scrape() {
                     }
 
                     await doc.save();
-                    await updateSubscriptions(doc);
+                    await subscriptionEmails.addExposure(doc);
                     numAdded ++;
                     console.log("Added:", exposureOutputLog);
                 } catch (err) {
@@ -67,6 +68,7 @@ async function scrape() {
     }
 
     await browser.close();
+    await subscriptionEmails.sendEmails();
 }
 
 async function getScrapedExposures(
