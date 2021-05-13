@@ -33,7 +33,7 @@ export default function RadiusSlider({ radius, setRadius }: Props) {
             />
 
             {radius > 1000 &&<p className="text-red-700 font-bold text-lg">
-                                WARNING: Setting a large radius could lead to <u>a lot</u> of notification emails.
+                                WARNING: Setting a large radius could lead to a lot of notification emails.
                             </p>}
             {radius < 100 &&<p className="text-red-700">
                                 WARNING: A small radius might miss notification emails you should have received.
