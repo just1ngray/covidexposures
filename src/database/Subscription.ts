@@ -27,7 +27,10 @@ export interface Subscription extends Document {
     bounds: {
         sw: { long: number, lat: number },
         ne: { long: number, lat: number }
-    }
+    },
+
+    /** the index for auto-removal: when was this document created */
+    createdAt: any
 }
 
 export const SubscriptionSchema = new Schema({
