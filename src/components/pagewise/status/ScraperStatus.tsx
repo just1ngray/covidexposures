@@ -21,7 +21,7 @@ export default function ScraperStatus({ scraper }: ScraperProps) {
                     <span className="float-right text-xs font-thin">{scraper.language}</span>
                     {scraper.country} {name}
                 </h3>
-                <div className="underline text-blue-500">{scraper.URL}</div>
+                <div className="underline text-blue-500 text-left">{scraper.URL}</div>
 
                 <div className="text-gray-600 text-left">
                     <p>First Checked: {new Date(scraper.firstScrape).toLocaleString()}</p>
@@ -29,7 +29,7 @@ export default function ScraperStatus({ scraper }: ScraperProps) {
                     <p># Exposures Tracked: {scraper.count}</p>
                 </div>
 
-                <div className="mt-2 -mb-0.5">
+                <div className="mt-2 -mb-0.5 text-left">
                     {scraper.tags.map((t, i) => 
                         <span key={i} className="
                             text-xs font-light
