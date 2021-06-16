@@ -5,7 +5,7 @@ import { ExposureModel, Exposure } from "../../../database/Exposure";
 import { ScraperModel } from '../../../database/Scraper';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method != "GET") 
+    if (req.method != "GET")
         return res.status(404).send("Please send as a GET request");
 
     await db.connect();
@@ -18,9 +18,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     delete exposure.start;
     delete exposure.end;
 
+    const since = Date.now() - 1000*60*60*24*31;
     const all = await ExposureModel.find({
         "coord.long": exposure.coord.long,
-        "coord.lat": exposure.coord.lat
+        "coord.lat": exposure.coord.lat,
+        end: { $gte: since }
     })
         .sort("-start")
         .select("-_id start end instructions");
