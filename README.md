@@ -59,6 +59,9 @@ MongoDB `covidexposures` database.
 -   [Google OAuth](https://developers.google.com/identity/protocols/oauth2) so people could login without
     having to create another email/password combination, and so I wouldn't have to verify their email
     address before sending transactional mail
+-   [namecheap](https://www.namecheap.com) for purchasing `covidexposures.ca` (after April 2022 I will
+    no longer be the owner of this domain)
+-   [DigitalOcean](https://www.digitalocean.com) VPS (Ubuntu droplet - $5/mo.)
 
 ## Setup
 Install and start [MongoDB Community](https://docs.mongodb.com/manual/installation/). This project will
