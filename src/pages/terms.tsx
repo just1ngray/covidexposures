@@ -2,10 +2,10 @@ import Container from "../components/Container";
 import Section from "../components/pagewise/legal/Section";
 import Definitions from "../components/pagewise/legal/Definitions";
 
-export default function PrivacyPolicy() {
+export default function Terms() {
     return (
         <Container>
-            <h3 className="text-3xl font-bold my-2">Privacy Policy</h3>
+            <h3 className="text-3xl font-bold my-2">Terms of Service</h3>
             <p className="underline">Last updated: May 1, 2021</p>
 
             <hr />
@@ -35,4 +35,4 @@ export default function PrivacyPolicy() {
             </p>
         </Container>
     );
-} 
+}
