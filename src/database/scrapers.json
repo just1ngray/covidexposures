@@ -1,0 +1,23 @@
+[{
+  "_id": {
+    "$oid": "608db51264582808b488761a"
+  },
+  "lastScrape": 1627748231297,
+  "isActive": true,
+  "language": "en",
+  "center": {
+    "long": -63.582687,
+    "lat": 44.65107,
+    "_id": {
+      "$oid": "61057783591cde8edd27dc85"
+    }
+  },
+  "tags": [
+    "NO_BUSSES"
+  ],
+  "URL": "https://www.nshealth.ca/covid-exposures",
+  "country": "CA",
+  "name": "nshealth",
+  "firstScrape": 1619899666345,
+  "__v": 0
+}]
