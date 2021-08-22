@@ -1,3 +1,6 @@
+# Demo Site
+[https://just1ngray.github.io/covidexposures/out](https://just1ngray.github.io/covidexposures/out/)
+
 # About
 COVID-19 is a pain. We've been asked to keep our contacts low and practice social distancing.
 To help slow the spread of the virus, some governments have been contact tracing as much as possible.
