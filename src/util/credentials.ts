@@ -28,8 +28,8 @@ export function login(creds: Credentials) {
     localStorage.setItem(CREDENTIALS, JSON.stringify(creds));
 
     // redirection should be done by O-Auth provider, but backup:
-    if (window.location.pathname == "/login")
-        window.location.pathname = "/dashboard";
+    if (window.location.pathname.includes("/login"))
+        window.location.pathname.replace("/login", "/dashboard");
 }
 
 export function logout() {
