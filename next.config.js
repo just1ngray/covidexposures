@@ -2,5 +2,5 @@ module.exports = {
     images: {
         loader: "imgix"
     },
-    basePath: "/out"
+    basePath: "/covidexposures/out"
 }
