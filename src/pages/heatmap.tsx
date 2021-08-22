@@ -1,15 +1,15 @@
-import ReactMapGL, { 
+import ReactMapGL, {
     FullscreenControl,
     NavigationControl,
     Layer,
     Source,
     MapEvent
 } from "react-map-gl";
-import { 
-    useState, 
-    useRef, 
-    useMemo, 
-    useEffect 
+import {
+    useState,
+    useRef,
+    useMemo,
+    useEffect
 } from "react";
 import axios from "axios";
 import { Types } from "mongoose";
@@ -34,7 +34,7 @@ interface Cache {
 
 let recentCallTime = null;
 
-export default function Heatmap({ apiKey }: { apiKey: string }) {
+export default function Heatmap({ apiKey, exposures }: { apiKey: string, exposures: Exposure[] }) {
     const [viewport, setViewport] = useState<ViewPort>({
         latitude: 44.651070,
         longitude: -63.582687,
@@ -52,30 +52,13 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
     }, []);
     const mapRef = useRef(null);
 
-    const [cache, setCache] = useState<Cache>({ input: null, exposures: [] });
-    async function findExposures() {
-        // precaution against DDOSing the server: only complete the request
-        // if there are no more recent ones within XXX ms
-        const callTime = Date.now();
-        recentCallTime = callTime;
-        await new Promise<void>((resolve) => {
-            setTimeout(() => resolve(), 250);
-        });
-        if (recentCallTime !== callTime) return; // another call is more recent
-
-        
-        const hashed = hashMapRef(mapRef);
-        if (hashed == cache.input) return; // no changes required
-
-        const bounds = JSON.parse(hashed);
-        const { data } = await axios.put("/api/exposure/locations", {
-            ...bounds,
-            known_ids: cache.exposures.map(e => e._id)
-        });
-        setCache((current) => {
-            return { input: hashed, exposures: [...current.exposures, ...data] }
-        });
-    }
+    // @ts-ignore
+    const [cache, setCache] = useState<Cache>({ input: null, exposures: exposures.map((e) => ({
+        ...e,
+        long: e.coord.long,
+        lat: e.coord.lat,
+    })) });
+    async function findExposures() {}
 
     const geojson = useMemo(() => generateGeojson(cache.exposures), [cache.exposures]);
 
@@ -92,8 +75,8 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
         if (!Types.ObjectId.isValid(properties._id))
             return setClickedExposure(null);
 
-        const { data } = await axios.get(`/api/exposure/${properties._id}`);
-        setClickedExposure(data);
+        // @ts-ignore
+        setClickedExposure(exposures[exposures.findIndex((e) => e._id == properties._id)]);
     }
 
     return (
@@ -104,17 +87,16 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
 
             <div className="h-full pb-12">
                 <p className="text-center">
-                    Showing COVID exposure locations since {` `}
-                    {new Date(Date.now() - 1000*60*60*24*30).toLocaleDateString()}.
+                    Showing all COVID exposure locations in the demo database
                 </p>
 
-                
+
                 <ReactMapGL mapboxApiAccessToken={apiKey}
                     reuseMaps
                     dragRotate={false}
                     width="100%" height="100%"
                     mapStyle="mapbox://styles/mapbox/streets-v11"
-                    {...viewport} 
+                    {...viewport}
                     onViewportChange={(vp) => {
                         setViewport({
                             longitude: vp.longitude,
@@ -126,9 +108,9 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
                     ref={mapRef}
                     onClick={getClickedExposure}
                 >
-                    <NavigationControl 
+                    <NavigationControl
                         showZoom={true}
-                        showCompass={false} 
+                        showCompass={false}
                     />
                     <FullscreenControl className="right-0" />
 
@@ -140,7 +122,7 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
                             "circle-stroke-width": 1,
                             "circle-color": "#fff",
                         }} />
-                        
+
                         <Layer type="heatmap" paint={{
                             "heatmap-color": [
                                 "interpolate", ["linear"],
@@ -152,15 +134,15 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
                                 0.7, "yellow",
                                 1, "red"
                             ],
-                            "heatmap-intensity": getHeatmapIntensity(viewport.zoom), 
+                            "heatmap-intensity": getHeatmapIntensity(viewport.zoom),
                             "heatmap-opacity": 0.67,
                             "heatmap-radius": 30
                         }} />
                     </Source>
 
-                    {clickedExposure && <MoreInfo 
-                        exposure={clickedExposure} 
-                        close={() => setClickedExposure(null)} 
+                    {clickedExposure && <MoreInfo
+                        exposure={clickedExposure}
+                        close={() => setClickedExposure(null)}
                     />}
                 </ReactMapGL>
             </div>
@@ -169,9 +151,14 @@ export default function Heatmap({ apiKey }: { apiKey: string }) {
 }
 
 export async function getStaticProps() {
+    const fs = require("fs");
+    const data = JSON.parse(fs.readFileSync("src/database/exposures.json", { encoding: "utf8" }))
+        .map((e) => ({ ...e, _id: e._id.$oid }));
+
     return {
         props: {
-            apiKey: keys.mapbox.map
+            apiKey: keys.mapbox.map,
+            exposures: data
         },
         revalidate: 60*60*6 // 6 hours
     }
@@ -199,13 +186,13 @@ function generateGeojson(exposures: Coordinate[] = []): GeoJSON.FeatureCollectio
  * Gets the intensity of the heatmap. Defaults to 1 when not specified.
  * (Subject to change)
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#paint-heatmap-heatmap-opacity
- * 
+ *
  * @param zoom the current viewport map zoom
  * @returns the heatmap intensity [0,inf)
  */
 function getHeatmapIntensity(zoom: number): number {
-    const pwDefn = (zoom <= 6.3) 
-        ? (0.13706*zoom - 0.16347) 
+    const pwDefn = (zoom <= 6.3)
+        ? (0.13706*zoom - 0.16347)
         : (-0.09708*zoom + 1.32063);
     return Math.max(pwDefn, 0);
 }
@@ -214,7 +201,7 @@ function getHeatmapIntensity(zoom: number): number {
  * Gets the intensity of the individual exposures. Defaults to 1 when not specified.
  * (Subject to change)
  * https://docs.mapbox.com/mapbox-gl-js/style-spec/layers/#paint-circle-circle-opacity
- * 
+ *
  * @param zoom the current viewport map zoom
  * @returns the heatmap intensity [0,1]
  */

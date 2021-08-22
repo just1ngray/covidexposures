@@ -21,9 +21,7 @@ export default function Dashboard({ apiKey }) {
     const [subs, setSubs] = useState<Subscription[]>(null);
     useEffect(() => {
         if (creds == undefined) return;
-        axios.put("/api/account/subscriptions", { credentials: creds })
-            .then(({ data }) => setSubs(data))
-            .catch(logout);
+        setSubs([]);
     }, [creds]);
 
     const [newSub, setNewSub] = useState<Subscription>({
@@ -41,24 +39,25 @@ export default function Dashboard({ apiKey }) {
     async function subscribe(e) {
         e.preventDefault();
 
+        // @ts-ignore
+        newSub.exposures = [];
+        newSub._id = Date.now();
+
         setResult("SENDING");
-        const { data } = await axios.post("/api/account/subscribe", { credentials: creds, ...newSub });
-        
-        setResult(data.exposures);
-        setSubs([...subs, data]);
-        setNewSub({
-            ...newSub,
-            coord: { long: newSub.coord.long, lat: newSub.coord.lat - 0.001 }
-        } as any);
+        setTimeout(() => {
+            setResult([]);
+            setSubs([...subs, newSub]);
+            setNewSub({
+                ...newSub,
+                coord: { long: newSub.coord.long, lat: newSub.coord.lat - 0.001 }
+            } as any);
+        }, 500)
     }
 
     async function unsubscribe(subscription: Subscription) {
-        await axios.delete(`/api/account/${subscription._id}`, { data: {
-            credentials: creds
-        }});
         setSubs(subs.filter((s) => s._id != subscription._id));
     }
-    
+
     return (
         <Container authRequired>
             <Head>
@@ -75,8 +74,8 @@ export default function Dashboard({ apiKey }) {
                     />
                 </div>
 
-                <RadiusSlider radius={newSub.radius} 
-                    setRadius={(r: number) => changeNewSub({ radius: r })} 
+                <RadiusSlider radius={newSub.radius}
+                    setRadius={(r: number) => changeNewSub({ radius: r })}
                 />
 
                 <div className="md:flex justify-center items-center">
@@ -88,8 +87,8 @@ export default function Dashboard({ apiKey }) {
                             endDatePicker.current.setOpen(true);
                         }}
                             popperPlacement="top"
-                            selected={new Date(newSub.start)} 
-                            onChange={(date: Date) => changeNewSub({ start: date.getTime() })} 
+                            selected={new Date(newSub.start)}
+                            onChange={(date: Date) => changeNewSub({ start: date.getTime() })}
                             showTimeSelect
                             dateFormat="Pp"
                             className="
@@ -103,7 +102,7 @@ export default function Dashboard({ apiKey }) {
                         <DatePicker ref={endDatePicker}
                             popperPlacement="top"
                             selected={new Date(newSub.end)}
-                            onChange={(date: Date) => changeNewSub({ end: date.getTime() })} 
+                            onChange={(date: Date) => changeNewSub({ end: date.getTime() })}
                             showTimeSelect
                             dateFormat="Pp"
                             className="p-1
@@ -119,12 +118,12 @@ export default function Dashboard({ apiKey }) {
                         <Result result={result} />
                     </div>
 
-                    {newSub.start >= newSub.end && 
+                    {newSub.start >= newSub.end &&
                         <p className="text-red-700">The ending date is before the starting date!</p>
                     }
 
                     <span>
-                        <PopButton type="submit" 
+                        <PopButton type="submit"
                             disabled={result == "SENDING" || newSub.start >= newSub.end}
                             className="
                                 p-4 bg-green-400 text-gray-50 font-bold rounded-full

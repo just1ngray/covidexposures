@@ -34,6 +34,12 @@ export default function Login({ clientId }) {
                 </p>
 
                 <div className="border-t border-b border-gray-300 my-1 py-2 flex flex-col">
+                    <button className="bg-green-600 text-white hover:bg-green-400 hover:text-black p-3 rounded"
+                        // @ts-ignore
+                        onClick={() => successful({ tokenId: "n/a", profileObj: { name: "DEMO ACCOUNT" }})}>
+                        DEMO LOGIN
+                    </button>
+
                     <GoogleLogin
                         clientId={clientId}
                         onSuccess={(res) => successful(res as GoogleLoginResponse)}

@@ -28,23 +28,16 @@ export default function Status({ scrapers }: Props) {
     );
 }
 
-export async function getServerSideProps() {
-    await db.connect();
-    const scrapers = await ScraperModel.find() as Scraper[];
-    
-    // count the number of exposures which reference this scraper
-    const addCounts = [];
-    for (const s of scrapers)
-        addCounts.push(
-            ExposureModel.countDocuments({ scraper: s._id })
-                .then((n) => (s as any).count = n)
-        );
-    await Promise.all(addCounts);
+export async function getStaticProps() {
+    const fs = require("fs");
+    let scrapers = JSON.parse(fs.readFileSync("src/database/scrapers.json", { encoding: "utf8" }));
 
+    // count the number of exposures which reference this scraper
+    scrapers = scrapers.map((s) => ({ ...s, count: "DEMO REMOVED" }));
     scrapers.sort((a, b) => Number(a.isActive) - Number(b.isActive))
 
     return {
-        props: { 
+        props: {
             scrapers: scrapers.map((s) => {
                 return {
                     URL: s.URL,

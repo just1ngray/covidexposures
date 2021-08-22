@@ -12,15 +12,17 @@ export default function Result({ result }) {
 
     if (result.length == 0) return (
         <div className="text-center">
-            <strong>No exposures matched your subscription.</strong> We will keep your 
+            <strong>No exposures matched your subscription.</strong> We will keep your
             information for 30 days and email you if we detect any potential exposures.
+            <br/><br/>
+            <i>DEMO REMOVED SEARCH FUNCTIONALITY</i>
         </div>
     );
 
     return (
         <div>
             <p className="text-center mb-4">
-                <strong>{result.length} exposure{result.length > 1 ? "s" : ""} matched 
+                <strong>{result.length} exposure{result.length > 1 ? "s" : ""} matched
                 your subscription.</strong> Please review the exposure details below:
             </p>
 

@@ -10,16 +10,20 @@ export default function Container({ className = "", children, authRequired = fal
     const router = useRouter();
 
     useEffect(() => {
-        if (authRequired && creds === null) 
+        if (authRequired && creds === null)
             router.push("/login");
     }, [creds]);
 
     return (
         <div className="flex flex-col min-h-screen">
+            <div className="bg-red-500 text-center p-2">
+                <p className="text-gray-200 text-xl">THIS IS A DEMO WITH REDUCED FUNCTIONALITY</p>
+            </div>
+
             <Navbar />
             <main className={`
                 flex flex-col flex-grow flex-shrink-0
-                container mx-auto px-2 
+                container mx-auto px-2
                 relative
                 ${className}
             `}>

@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Flogin","\u002F","\u002Fstatus","\u002Fdashboard","\u002Fheatmap"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
